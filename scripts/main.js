@@ -1,8 +1,11 @@
-awesomeParse = d3.csv("./Database/scrubbed.csv", function(data) {
+var worldMap;
+
+d3.csv("./Database/complete.csv", function(data) {
   return {
-    datatime: data.Datetime, // convert "Year" column to Date
+    datetime: data.datetime,
    	city: data.city,
    	country: data.country,
+    state: data.state,
    	shape: data.shape,
    	duration: +data.durationSeconds,
    	comments: data.comments,
@@ -10,5 +13,5 @@ awesomeParse = d3.csv("./Database/scrubbed.csv", function(data) {
    	longitude: +data.longitude,
   };	
 }).then(function(data){
-    console.log(data);
+    worldMap = new worldMap(data)
 });
