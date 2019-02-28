@@ -1,4 +1,4 @@
-var worldMap;
+var worldMap, focus_plus_context, points;
 
 d3.csv("./Database/complete.csv", function(data) {
   return {
@@ -13,5 +13,9 @@ d3.csv("./Database/complete.csv", function(data) {
    	longitude: +data.longitude,
   };	
 }).then(function(data){
-    worldMap = new worldMap(data)
+    //points = new Points();
+    
+    worldMap = new worldMap(data);
+    //focus_plus_context = new focusPlusContext(data);
+    
 });
