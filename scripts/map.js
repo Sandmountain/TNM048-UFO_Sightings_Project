@@ -23,7 +23,13 @@ function worldMap(data) {
     var h = $("#mapid").height();     
 
      
+    var projection = d3.geoMercator()
+        .scale(w / 2 / Math.PI)
+        //.scale(100)
+        .translate([w / 2, h / 2])
 
+    var path = d3.geoPath()
+        .projection(projection);
 
     //console.log(transform);
 
@@ -44,16 +50,18 @@ function worldMap(data) {
         .enter()
         .append("circle")
         .attr("cx", function(d) {
-                return d.latitude;
+            var coords = projection([d.longitude, d.latitude]);
+            return coords[0];
             })
         .attr("cy", function(d) {
-                return d.longitude;
+            var coords = projection([d.longitude, d.latitude]);
+            return coords[1];
             })
         .attr("r", function(d) {
-            return Math.sqrt(100-d.latitude);
+            return 2;
          })
 
-
+    /*     
     var transform = d3.geoTransform({point:latLong}),
         d3path = d3.geoPath().projection(transform),  
         g = svg_map.append("g").attr("class", "leaflet-zoom-hide");
@@ -61,7 +69,7 @@ function worldMap(data) {
     d3_features = g.selectAll("d3path")
             .data(geoShape.features)
             .enter().append("d3path");
-
+    */     
     //map.on("viewreset", reset);
     //reset();
 
@@ -73,7 +81,12 @@ function worldMap(data) {
             this.stream.point(point.x, point.y);
     }
 
-
+    function applyLatLngToLayer(d) {
+        var x = d.longitude;
+        var y = d.latitude;
+        //Remove comment when reached task 19
+        return map.latLngToLayerPoint(new L.LatLng(y, x));
+    }
 
 
 
