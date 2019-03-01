@@ -1,9 +1,78 @@
 function worldMap(data) {
 
-        //console.log(data);
-    
-    var map = L.map('mapid').setView([10, 15], 2.2);
+    // mapid is the id of the div where the map will appear
+var map = L
+  .map('mapid')
+  .setView([10, 15], 1);   // center position + zoom
 
+// Add a tile to the map = a background. Comes from OpenStreetmap
+L.tileLayer(
+    'https://api.mapbox.com/styles/v1/josecoto/civ8gwgk3000a2ipdgnsscnai/'
+        +'tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiam9zZWNvdG8iLCJhIjoiY2l2OGZxZWNuMDAxODJ6cGdhcGFuN2IyaCJ9.7szLs0lc_2EjX6g21HI_Kg', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+    maxZoom: 6,
+    }).addTo(map);
+
+// Add a svg layer to the map
+L.svg().addTo(map);
+
+// Select the svg area and add circles:
+d3.select("#mapid")
+  .select("svg")
+  .selectAll("myCircles")
+  .data(data)
+  .enter()
+  .append("circle")
+    .attr("cx", function(d){     
+            return map.latLngToLayerPoint([d.latitude, d.longitude]).x; 
+    })
+    .attr("cy", function(d){      
+            return map.latLngToLayerPoint([d.latitude, d.longitude]).y;              
+    })
+    .attr("r", 1)
+    .style("fill", "red")
+    .attr("stroke", "red")
+    .attr("stroke-width", 3)
+    .attr("fill-opacity", .4)
+
+// Function that update circle position if something change
+function update() {
+  d3.selectAll("circle")
+    .attr("cx", function(d){ return map.latLngToLayerPoint([d.latitude, d.longitude]).x })
+    .attr("cy", function(d){ return map.latLngToLayerPoint([d.latitude, d.longitude]).y })
+}
+
+// If the user change the map (zoom or drag), I update circle position:
+map.on("moveend", update)
+
+
+/*
+    d3.json("circles.json", function(collection) {
+        /* Add a LatLng object to each item in the dataset */
+        /*
+        collection.objects.forEach(function(d) {
+            d.LatLng = new L.LatLng(d.circle.coordinates[0],
+                                    d.circle.coordinates[1])
+        })
+        
+        var feature = g.selectAll("circle")
+            .data(collection.objects)
+            .enter().append("circle")
+            .style("stroke", "black")  
+            .style("opacity", .6) 
+            .style("fill", "red")
+            .attr("r", 20);  
+        
+        
+
+        
+    })           
+*/
+
+        //console.log(data);
+    /*
+    var map = L.map('mapid').setView([42.6525000, -73.7566667], 10);
+//42.6525000,-73.7566667
     L.tileLayer('https://api.mapbox.com/styles/v1/josecoto/civ8gwgk3000a2ipdgnsscnai/'
         +'tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiam9zZWNvdG8iLCJhIjoiY2l2OGZxZWNuMDAxODJ6cGdhcGFuN2IyaCJ9.7szLs0lc_2EjX6g21HI_Kg', {
         maxZoom: 18,
@@ -18,48 +87,68 @@ function worldMap(data) {
     //var maxDate = 
     //var minDate = d3.min(data, function (d) { return parseTime(d.datetime) });
     //var xScale =  d3.scaleTime().range([0,width]);
-
+/*
     var w = $("#mapid").width();
     var h = $("#mapid").height();     
 
      
-    var projection = d3.geoMercator()
-        .scale(w / 2 / Math.PI)
-        //.scale(100)
-        .translate([w / 2, h / 2])
-
-    var path = d3.geoPath()
-        .projection(projection);
-
-    //console.log(transform);
+    //var projection = d3.geoMercator()
+    //    .scale(w / 2 / Math.PI)
+    //    .translate([w / 2, h / 2])
 
     function latLong(x,y)
     {      
-        console.log(x + ' and ' + y);
+        //console.log(x + ' and ' + y);
         var point = map.latLngToLayerPoint(new L.LatLng(y, x));
         this.stream.point(point.x, point.y);
-    }   
+    }  
 
     var svg_map = d3.select(map.getPanes().overlayPane)
             .append("svg")
             .attr("width", w)
             .attr("height", h);
+    
 
+    L.circle([42.6525000,-73.7566667], {radius: 100}).addTo(map)
+    L.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+    /*           
     svg_map.selectAll("circle")
         .data(data)
         .enter()
         .append("circle")
         .attr("cx", function(d) {
             var coords = projection([d.longitude, d.latitude]);
+            //console.log(coords[0]);
             return coords[0];
+            //var coords = latLong(d.longitude, d.latitude);
+            //return coords.x;
             })
         .attr("cy", function(d) {
             var coords = projection([d.longitude, d.latitude]);
+            
             return coords[1];
+            //var coords = latLong(d.longitude, d.latitude);
+            //return coords.y;        
             })
         .attr("r", function(d) {
             return 2;
          })
+    */
+    
+
+
+         //  var path = d3.geoPath()
+        //.projection(projection);
+
+    //console.log(transform);
+
+   
+
+
+
 
     /*     
     var transform = d3.geoTransform({point:latLong}),
@@ -73,7 +162,7 @@ function worldMap(data) {
     //map.on("viewreset", reset);
     //reset();
 
-
+/*
 
 
     function projectPoint(x, y) {
@@ -88,7 +177,7 @@ function worldMap(data) {
         return map.latLngToLayerPoint(new L.LatLng(y, x));
     }
 
-
+*/
 
 
 
