@@ -12,40 +12,32 @@ function lineChart(data)
     var g = svg.append("g")
         .attr("transform", "translate("+ margin.left + "," + margin.top + ")");
 
-    var xScale = d3.scaleLinear().rangeRound([0, width]);
-    var yScale = d3.scaleLinear().rangeRound([height,0]);
-    var xAxis = d3.axisBottom(xScale);
-    var yAxis = d3.axisLeft(yScale);
-
-    //Setting scale parameters
-    var maxIncome = d3.max(data, function(d){ return d.hi_mean});
-    var minIncome = d3.min(data, function(d){return d.hi_mean});
-    
-    var maxDept = d3.max(data, function(d){ return d.hc_mortgage_mean});
-    var minDept = d3.min(data, function(d){ return d.hc_mortgage_mean});
+    var x = d3.scaleLinear().rangeRound([0, width]);
+    var y = d3.scaleLinear().rangeRound([height,0]);
+    var xAxis = d3.axisBottom(x);
+    var yAxis = d3.axisLeft(y);
 
     var line = d3.line()
         .x(function(d)
         {
-            return xScale(d.hi_mean);
+            return x(d.hi_mean);
         })
         .y(function(d)
         {
-            return yScale(d.hc_mortgage_mean);
+            return y(d.rent_mean);
         });
     
-    xScale.domain(d3.extent(data, function(d)
+    x.domain(d3.extent(data, function(d)
     {
-        return xScale(d.hi_mean);
+        return d.hi_mean;
     }));
 
-    yScale.domain(d3.extent(data, function(d)
+    y.domain(d3.extent(data, function(d)
     {
-        return yScale(d.hc_mortgage_mean);
+        return d.rent_mean;
     }));
 
-    var xAxis = d3.axisBottom(xScale);
-    var yAxis = d3.axisLeft(yScale);
+    
 
     g.append("g")
         .attr("transform", "translate(0,"+ height + ")")
@@ -56,7 +48,9 @@ function lineChart(data)
 
     g.append("path")
         .datum(data)
+        .attr("class", "line")
         .attr("fill", "none")
-        .attr("stroke","steelblue")
+        .attr("stroke","blue")
+        .attr("stroke-width", 2)
         .attr("d",line);
 }
