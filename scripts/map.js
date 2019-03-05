@@ -66,7 +66,17 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
         function clickedState(d) {
             if (d3.select('.background').node() === this) return reset();
             if (active.node() === this) return reset();
-             
+            
+            /*
+            *  Update the lineChart(s) with current data infromation
+            *  (data from dataset)
+            */
+
+            var filteredArray = data.filter( data => data.stateID === d.id ).map( obj => obj );
+          
+
+            lineChart(filteredArray); 
+
             /*
             *   Set Div infromation
             */
@@ -118,6 +128,9 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                     var countyName = counties.find(item => item.FIPS === countyID);
                     activeCounty = true; 
 
+                    var filteredArray = data.filter( data => data.county === countyName.Name ).map( obj => obj );
+                    console.log(data[0].county);
+                    lineChart(filteredArray); 
                     //Setting County Name
                     $( "#CountyName" ).html(countyName.Name).show();                  
                     }
