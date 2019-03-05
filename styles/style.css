@@ -2,9 +2,11 @@ html, body {
   height: 100%;
 }
 
-#mapid { 
-	height: 100%;
+#usMap { 
+	height: 50%;
+  width: 50%;
 	z-index: 1;
+  position: centre;
 }
 
 .background {

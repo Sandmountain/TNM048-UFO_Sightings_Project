@@ -22,6 +22,6 @@ d3.csv("./Database/real_estate_db.csv", function(data) {
 	hi_stdev: +data.hi_stdev,
   };	
 }).then(function(data){
-	plotPoints = new map(data);
+	usMap = new map(data);
 }); 
   
