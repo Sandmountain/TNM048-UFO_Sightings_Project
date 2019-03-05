@@ -4,31 +4,28 @@
 	<meta charset="utf-8">
 	<title>UFO - visualization</title>
 	<link rel="stylesheet" href="styles/style.css">
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
 </head>
+
 <body>
 
-<div id="TimeLineHolder">
-	<div id="TimeLine"></div>
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+ <script type="text/javascript" src="http://d3js.org/topojson.v3.min.js"></script>
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<!--<script src="https://d3js.org/d3-queue.v3.min.js"></script>-->
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+
+<div id="PaneHolder">
+	<p id="StateName">Texas</p>
+	<p id="CountyName">Maryland</p>
 </div>
-<div id="mapid"></div>
-
-
+<div id="usMap"></div>
 </body>
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://d3js.org/d3-time.v1.min.js"></script>
-<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 
 <!--Our scripts -->
+
+<script src="scripts/main.js"></script>
 <script src="scripts/plot_points.js"></script>
 <script src="scripts/map.js"></script>
-<script src="scripts/main.js"></script>
-
-
 </html>
