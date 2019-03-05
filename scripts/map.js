@@ -1,347 +1,148 @@
-function worldMap(data) {
+function map(data){
 
-    // mapid is the id of the div where the map will appear
-var map = L
-  .map('mapid')
-  .setView([10, 15], 1);   // center position + zoom
+var margin = { top: 2, bottom: 2, left: 2, right:2}, 
+    width = parseInt(d3.select('#usMap').style('width')), 
+    width = width - margin.left - margin.right, 
+    mapRatio = 0.5, 
+    height = width * mapRatio, 
+    active = d3.select(null),
+    activeCounty = false,
+    latestCounty = d3.select(null);
 
-// Add a tile to the map = a background. Comes from OpenStreetmap
-L.tileLayer(
-    'https://api.mapbox.com/styles/v1/josecoto/civ8gwgk3000a2ipdgnsscnai/'
-        +'tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiam9zZWNvdG8iLCJhIjoiY2l2OGZxZWNuMDAxODJ6cGdhcGFuN2IyaCJ9.7szLs0lc_2EjX6g21HI_Kg', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-    maxZoom: 6,
-    }).addTo(map);
+        var svg = d3.select('#usMap').append('svg')
+            .attr('class', 'center-container')
+            .attr('height', height + margin.top + margin.bottom)
+            .attr('width', width + margin.left + margin.right);
 
-// Add a svg layer to the map
-L.svg().addTo(map);
+        svg.append('rect')
+            .attr('class', 'background center-container')
+            .attr('height', height + margin.top + margin.bottom)
+            .attr('width', width + margin.left + margin.right)
+            .on('click', clickedState);
 
-// Select the svg area and add circles:
-d3.select("#mapid")
-  .select("svg")
-  .selectAll("myCircles")
-  .data(data)
-  .enter()
-  .append("circle")
-    .attr("cx", function(d){     
-            return map.latLngToLayerPoint([d.latitude, d.longitude]).x; 
-    })
-    .attr("cy", function(d){      
-            return map.latLngToLayerPoint([d.latitude, d.longitude]).y;              
-    })
-    .attr("r", 1)
-    .style("fill", "red")
-    .attr("stroke", "red")
-    .attr("stroke-width", 3)
-    .attr("fill-opacity", .4)
+        Promise.resolve(d3.json('./Database/us-counties.topojson'))
+            .then(ready);
 
-// Function that update circle position if something change
-function update() {
-  d3.selectAll("circle")
-    .attr("cx", function(d){ return map.latLngToLayerPoint([d.latitude, d.longitude]).x })
-    .attr("cy", function(d){ return map.latLngToLayerPoint([d.latitude, d.longitude]).y })
-}
+        var projection = d3.geoAlbersUsa()
+            .translate([width /2 , height / 2])
+            .scale(width);
 
-// If the user change the map (zoom or drag), I update circle position:
-map.on("moveend", update)
+        var path = d3.geoPath()
+            .projection(projection);
 
+        var g = svg.append("g")
+            .attr('class', 'center-container center-items us-state')
+            .attr('transform', 'translate('+margin.left+','+margin.top+')')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
 
-/*
-    d3.json("circles.json", function(collection) {
-        /* Add a LatLng object to each item in the dataset */
-        /*
-        collection.objects.forEach(function(d) {
-            d.LatLng = new L.LatLng(d.circle.coordinates[0],
-                                    d.circle.coordinates[1])
-        })
-        
-        var feature = g.selectAll("circle")
-            .data(collection.objects)
-            .enter().append("circle")
-            .style("stroke", "black")  
-            .style("opacity", .6) 
-            .style("fill", "red")
-            .attr("r", 20);  
-        
-        
+        function ready(us) {
 
-        
-    })           
-*/
+            g.append("g")
+                .attr("id", "counties")
+                .selectAll("path")
+                .data(topojson.feature(us, us.objects.counties).features)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("class", "county-boundary")
+                .on("click", clickedCounty);
 
-        //console.log(data);
-    /*
-    var map = L.map('mapid').setView([42.6525000, -73.7566667], 10);
-//42.6525000,-73.7566667
-    L.tileLayer('https://api.mapbox.com/styles/v1/josecoto/civ8gwgk3000a2ipdgnsscnai/'
-        +'tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiam9zZWNvdG8iLCJhIjoiY2l2OGZxZWNuMDAxODJ6cGdhcGFuN2IyaCJ9.7szLs0lc_2EjX6g21HI_Kg', {
-        maxZoom: 18,
-        id: 'mapbox.streets',
-        accessToken: 'your.mapbox.access.token'
-    }).addTo(map);
-       
-    //Tidsformat 10/10/1949 20:30
-    //ar parseTime = d3.timeParse("%m/%d/%Y %H:%M");
+            g.append("g")
+                .attr("id", "states")
+                .selectAll("path")
+                .data(topojson.feature(us, us.objects.states).features)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("class", "state")
+                .on("click", clickedState);
 
-    /*  Find the earliest and latest time in the range */
-    //var maxDate = 
-    //var minDate = d3.min(data, function (d) { return parseTime(d.datetime) });
-    //var xScale =  d3.scaleTime().range([0,width]);
-/*
-    var w = $("#mapid").width();
-    var h = $("#mapid").height();     
+            g.append("path")
+                .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+                .attr("id", "state-borders")
+                .attr("d", path);
 
-     
-    //var projection = d3.geoMercator()
-    //    .scale(w / 2 / Math.PI)
-    //    .translate([w / 2, h / 2])
-
-    function latLong(x,y)
-    {      
-        //console.log(x + ' and ' + y);
-        var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-        this.stream.point(point.x, point.y);
-    }  
-
-    var svg_map = d3.select(map.getPanes().overlayPane)
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h);
-    
-
-    L.circle([42.6525000,-73.7566667], {radius: 100}).addTo(map)
-    L.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-    /*           
-    svg_map.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("cx", function(d) {
-            var coords = projection([d.longitude, d.latitude]);
-            //console.log(coords[0]);
-            return coords[0];
-            //var coords = latLong(d.longitude, d.latitude);
-            //return coords.x;
-            })
-        .attr("cy", function(d) {
-            var coords = projection([d.longitude, d.latitude]);
-            
-            return coords[1];
-            //var coords = latLong(d.longitude, d.latitude);
-            //return coords.y;        
-            })
-        .attr("r", function(d) {
-            return 2;
-         })
-    */
-    
-
-
-         //  var path = d3.geoPath()
-        //.projection(projection);
-
-    //console.log(transform);
-
-   
-
-
-
-
-    /*     
-    var transform = d3.geoTransform({point:latLong}),
-        d3path = d3.geoPath().projection(transform),  
-        g = svg_map.append("g").attr("class", "leaflet-zoom-hide");
-
-    d3_features = g.selectAll("d3path")
-            .data(geoShape.features)
-            .enter().append("d3path");
-    */     
-    //map.on("viewreset", reset);
-    //reset();
-
-/*
-
-
-    function projectPoint(x, y) {
-            var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-            this.stream.point(point.x, point.y);
-    }
-
-    function applyLatLngToLayer(d) {
-        var x = d.longitude;
-        var y = d.latitude;
-        //Remove comment when reached task 19
-        return map.latLngToLayerPoint(new L.LatLng(y, x));
-    }
-
-*/
-
-
-
-    //var g = svg_map.append("g").attr("class","leaflet-zoom-hide");
-
-    /**
-     * Task 17 - Create a function that projects lat/lng points on the map.
-     * Use latLngToLayerPoint, remember which goes where. 
-     */
-     /*
-    function latLong(x,y)
-    {      
-        var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-        this.stream.point(point.x, point.y);
-    }
-
-        var transform = d3.geoTransform({point:latLong});
-        var d3path = d3.geoPath().projection(transform);
-
-    function applyLatLngToLayer(d) {
-        var x = d.longitude;
-        var y = d.latitude;
-        //Remove comment when reached task 19
-        return map.latLngToLayerPoint(new L.LatLng(y, x));
-    }
-
-
-
-    $("svg").css({position:'absolute'});
-   //d3.select("#TimeLine").attr("align","center");
-    var xScale = d3.scale.linear()
-                     .domain([0, d3.max(data, function (d) { return parseTime(d.datetime) })])
-                     //.range([0, w]);
-
-    svg.append("g")
-        .call(d3.svg.axis()
-                .scale(xScale)
-                .orient("bottom"));               
-
-
-	//Create a timeline
-	/*
-    var margin = { top: 0, right: 0, bottom: 20, left: 0 },
-        margin2 = { top: 150, right: 0, bottom: 10, left: 0 },
-        width = $("#TimeLineHolder").width(),
-        height = 500 - margin.top - margin.bottom,
-        height2 = 200 - margin2.top - margin2.bottom;
-
-
-	var svg = d3.select("#TimeLine").append("svg")
-        .attr("postion", "fixed")
-        .attr("width", "99%")
-        .attr("height", height + margin.top + margin.bottom);
-
-    var focus = svg.append("g")
-        .attr("class", "focus")
-        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-
-    var context = svg.append("g")
-        .attr("class", "TimeLine")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var timeTst = d3.timeParse("%m/%d/%Y %H:%M");
-    
-	
- 	var xScale =  d3.scaleTime().range([0,width]);
-    var yScale =  d3.scaleLinear().range([height , 0]);
-    var xAxis = d3.axisBottom(xScale);
-    var yAxis = d3.axisLeft(yScale);
-
-    var navXScale = d3.scaleTime().range([0,width]);
-    var navYScale = d3.scaleLinear().range([height2, 0]);
-    var navXAxis = d3.axisBottom(navXScale);
-
-    var brush = d3.brushX().extent([[0, 0], [width, height2]]).on("brush end", brushed);
-						 
-    var maxDate = d3.max(data, function (d) { return timeTst(d.datetime) });
-    var minDate = d3.min(data, function (d) { return timeTst(d.datetime) });
-    var maxMag = d3.max(data, function (d) { return d.durationSeconds });
-    var minMag = d3.min(data, function (d) { return d.durationSeconds })
-
-    //Calculate todays date.
-    maxDate_plus = new Date(maxDate.getTime() + 300 * 144000000)
-    */
-    /**
-     * Task 5 - Set the axes scales, both for focus and context. 
-     */
-     /*
-    xScale.domain([minDate,maxDate_plus]);
-    yScale.domain([minMag,maxMag]);
-
-    navXScale.domain(xScale.domain()); 
-    navYScale.domain(yScale.domain());
-
-    var dots = context.append("g");
-    dots.attr("clip-path", "url(#clip)");
-    
-    context.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + height2 + ")")
-        .call(navXAxis)
-        //here..
-
-
-    small_points = dots.selectAll("dot")
-        //here..
-        .data(data)
-        .enter().append("circle")
-            .attr("class", "dotContext")
-        .filter(function (d) { return d.durationSeconds != null })
-        .attr("cx", function (d) {
-		
-            return navXScale(timeTst(d.datetime));
-        })
-        .attr("cy", function (d) {
-
-            return navYScale(d.durationSeconds);
-        });
-
-
-    points.plot(small_points, 10,10);
-
-    context.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + height2 + ")")
-        .call(navXAxis)
-
-    context.append("g")
-            .attr("class", "brush")
-            .call(brush)
-            //.call(brush.move, d3.scaleTime(xScale).range())
-            //
-            .call(brush.move)
-
-//Brush function for filtering through the data.
-    function brushed(){
-        //Function that updates scatter plot and map each time brush is used
-        var s = d3.event.selection || navXScale.range();
-        xScale.domain(s.map(navXScale.invert, navXScale));
-        focus.selectAll(".dot")
-            .filter(function (d) { return d.durationSeconds != null })
-            .attr("cx", function (d) {
-                return xScale(timeTst(d.datetime));
-            })
-            .attr("cy", function (d) {
-                return yScale(d.durationSeconds);
-            })
-
-        focus.select(".axis--x").call(xAxis);
-
-        if (d3.event.type == "end") {
-            var curr_view_erth = []
-            d3.selectAll(".dot").each(
-                function (d, i) {
-                    if (timeTst(d.datetime) >= xScale.domain()[0] && 
-                        timeTst(d.datetime) <= xScale.domain()[1]) {
-                        //curr_view_erth.push(d.id.toString());
-                    }
-                });
-          
-            curr_points_view = worldMap.change_map_points(curr_view_erth)
         }
+
+        function clickedState(d) {
+            if (d3.select('.background').node() === this) return reset();
+            if (active.node() === this) return reset();
+             
+            /*
+            *   Set Div infromation
+            */
+            var clickedState = returnState(d.id);
+            $( "#PaneHolder" ).show("fast");
+            $( "#CountyName" ).hide();
+            $( "#StateName" ).html(clickedState);
+
+            //Set the clicked state to be active
+            active.classed("active", false);
+            active = d3.select(this).classed("active", true);
+
+            //Set the bounds to be inside the clicked state
+            var bounds = path.bounds(d),
+                dx = bounds[1][0] - bounds[0][0],
+                dy = bounds[1][1] - bounds[0][1],
+                x = (bounds[0][0] + bounds[1][0]) / 2,
+                y = (bounds[0][1] + bounds[1][1]) / 2,
+                scale = .9 / Math.max(dx / width, dy / height),
+                translate = [width / 2 - scale * x, height / 2 - scale * y];
+            
+            //Transition to the new bounds
+            g.transition()
+                .duration(750)
+                .style("stroke-width", 1.5 / scale + "px")
+                .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+        }
+
+        function clickedCounty(d){
+            
+            //checks wether a county has been clicked or not
+            if(activeCounty == false){
+                latestCounty = d3.select(this);
+                latestCounty.style("fill", "red");                                   
+            }
+            else{
+                d3.select(this).style("fill", "red");
+                latestCounty.style("fill", "#aaa").on('mouseover', function(d){d3.select(this).style("fill", "orange")}).on('mouseout', function(d){d3.select(this).style("fill", "#aaa")});          
+                latestCounty = d3.select(this);
+                activeCounty = false;
+            }
+           
+            var countyID = d.id;
+            $.ajax({
+                dataType: "json",
+                url: "./Database/fips.json",
+                mimeType: "application/json",
+                success: function(counties){
+                    var countyName = counties.find(item => item.FIPS === countyID);
+                    activeCounty = true; 
+
+                    //Setting County Name
+                    $( "#CountyName" ).html(countyName.Name).show();                  
+                    }
+            });
+        }
+
+        //Function to reset the position
+        function reset() {
+            active.classed("active", false);
+            active = d3.select(null);
+
+            $( "#PaneHolder" ).hide("fast");
+
+            //transition back to the original position
+            g.transition()
+                .delay(100)
+                .duration(750)
+                .style("stroke-width", "1.5px")
+                .attr('transform', 'translate('+margin.left+','+margin.top+')');
+        }
+
+    function returnState(id){
+      var state = {"10":"Delaware","11":"District of Columbia","12":"Florida","13":"Geogia","15":"Hawaii","16":"Idaho","17":"Illinois","18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky","22":"Louisiana","23":"Maine","24":"Maryland","25":"Massachusetts","26":"Michigan","27":"Minnesota","28":"Mississippi","29":"Missouri","30":"Montana","31":"Nebraska","32":"Nevada","33":"New Hampshire","34":"New Jersey","35":"New Mexico","36":"New York","37":"North Carolina","38":"North Dakota","39":"Ohio","40":"Oklahoma","41":"Oregon","42":"Pennsylvania","44":"Rhode Island","45":"South Carolina","46":"South Dakota","47":"Tennessee","48":"Texas","49":"Utah","50":"Vermont","51":"Virginia","53":"Washington","54":"West Virginia","55":"Wisconsin","56":"Wyoming","1":"Alabama","2":"Alaska","4":"Arizona","5":"Arkansas","6":"California","8":"Colorado","9":"Connecticut"}
+      return state[id];
     }
-    */
 
 
 }
