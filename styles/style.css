@@ -37,12 +37,13 @@ html, body {
     fill: #aaa;
     stroke: #fff;
     stroke-width: .5px;
-    cursor:  pointer;
+    opacity: 0.3;
 }
 
-.county-boundary:hover {
+/*.county-boundary:hover {
     fill: orange;
 }
+*/
 .state:hover{
   fill: #aaa;
 }
@@ -71,4 +72,41 @@ html, body {
 }
 #CountyName{
   font-size: 70px;
+}
+
+div.tooltip {
+  position: absolute; 
+  text-align: center; 
+  width: 100px;  
+  height: 30px;   
+  padding: 2px; 
+  font: 12px sans-serif; 
+  color: white; 
+  background: #000; 
+  border: 0px;          
+  border-radius: 8px;
+ /*  pointer-events: none;  This line needs to be removed */
+}
+ #CountyLabel{
+  position: absolute;
+  left:0%;
+  bottom: 50%;
+  text-align: center;
+  background: red;
+  width: 200px;
+  z-index: 5;
+ }
+
+ .stateText{
+  font-weight: bold;
+ }
+ .countyText{
+  font-style: italic;
+ }
+.plotPoints{
+  opacity: 0.5;
+}
+.plotPoints:hover{
+   opacity: 1;
+   cursor: pointer;
 }

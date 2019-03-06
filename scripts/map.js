@@ -1,3 +1,6 @@
+
+
+
 function map(data){
 
 var margin = { top: 2, bottom: 2, left: 2, right:2}, 
@@ -7,7 +10,17 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
     height = width * mapRatio, 
     active = d3.select(null),
     activeCounty = false,
-    latestCounty = d3.select(null);
+    latestCounty = d3.select(null),
+    countyt;
+
+
+        var scaleQuantColor = d3.scaleQuantile()
+                .domain([0, 500, 1000, 5000, 10000, 20000, 50000])
+                .range(["#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f", "#fef0d9","#00ff00", "#8B008B"]);
+
+        var scaleQuantRad = d3.scaleQuantile()
+                .domain([0, 500, 1000, 5000, 10000, 20000, 50000])
+                .range([0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.5]);
 
         var svg = d3.select('#usMap').append('svg')
             .attr('class', 'center-container')
@@ -36,7 +49,12 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
 
+      
+
+
         function ready(us) {
+
+            //plotta punkter
 
             g.append("g")
                 .attr("id", "counties")
@@ -45,7 +63,11 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .enter().append("path")
                 .attr("d", path)
                 .attr("class", "county-boundary")
-                .on("click", clickedCounty);
+                .on("mouseover", function(d) {
+                    hoverCounty(d);      
+                })
+            
+             
 
             g.append("g")
                 .attr("id", "states")
@@ -54,12 +76,41 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .enter().append("path")
                 .attr("d", path)
                 .attr("class", "state")
-                .on("click", clickedState);
+                .on("click", clickedState)
+                .on("mouseover", function(d) {
+                    hoverState(d);      
+                })
+                
 
             g.append("path")
                 .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
                 .attr("id", "state-borders")
                 .attr("d", path);
+
+
+             g.append("g").selectAll("circle")
+                .data(data)
+                .enter().append("circle")
+                .attr("cx", function (d) { 
+                    if(projection([d.longitude,d.latitude])) 
+                        return projection([d.longitude,d.latitude])[0] 
+                    else
+                        return;
+                })
+                .attr("cy", function (d) {  
+                    if(projection([d.longitude,d.latitude]))
+                        return projection([d.longitude,d.latitude])[1]; 
+                    else
+                        return;
+                    })
+                .attr("r", function(d){
+                    return scaleQuantRad(d.pop);
+                })
+                .attr("class", "plotPoints")
+                .attr("fill", function(d){
+                    return scaleQuantColor(d.pop);
+                    });
+                
 
         }
 
@@ -95,7 +146,7 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 dy = bounds[1][1] - bounds[0][1],
                 x = (bounds[0][0] + bounds[1][0]) / 2,
                 y = (bounds[0][1] + bounds[1][1]) / 2,
-                scale = .9 / Math.max(dx / width, dy / height),
+                scale = 0.5 / Math.max(dx / width, dy / height),
                 translate = [width / 2 - scale * x, height / 2 - scale * y];
             
             //Transition to the new bounds
@@ -103,38 +154,31 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .duration(750)
                 .style("stroke-width", 1.5 / scale + "px")
                 .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+
+        
         }
 
-        function clickedCounty(d){
+
+        function hoverCounty(d){
             
-            //checks wether a county has been clicked or not
-            if(activeCounty == false){
-                latestCounty = d3.select(this);
-                latestCounty.style("fill", "red");                                   
-            }
-            else{
-                d3.select(this).style("fill", "red");
-                latestCounty.style("fill", "#aaa").on('mouseover', function(d){d3.select(this).style("fill", "orange")}).on('mouseout', function(d){d3.select(this).style("fill", "#aaa")});          
-                latestCounty = d3.select(this);
-                activeCounty = false;
-            }
-           
-            var countyID = d.id;
+            //checks wether a county has been clicked or not 
             $.ajax({
                 dataType: "json",
                 url: "./Database/fips.json",
                 mimeType: "application/json",
                 success: function(counties){
-                    var countyName = counties.find(item => item.FIPS === countyID);
-                    activeCounty = true; 
-
-                    var filteredArray = data.filter( data => data.county === countyName.Name ).map( obj => obj );
-                    console.log(data[0].county);
-                    lineChart(filteredArray); 
-                    //Setting County Name
-                    $( "#CountyName" ).html(countyName.Name).show();                  
+                    var countyName = counties.find(item => item.FIPS === d.id);
+        
+                    //Set county tooltip
+                    $( "#CountyLabel" ).html("<p class='countyText'>" + countyName.Name + " , " + countyName.State + "</p>").show();
+                    
                     }
             });
+        }
+
+        function hoverState(d)
+        {
+            $( "#CountyLabel" ).html("<p class='stateText'>" + returnState(d.id)+ "</p>").show();
         }
 
         //Function to reset the position
@@ -150,6 +194,8 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .duration(750)
                 .style("stroke-width", "1.5px")
                 .attr('transform', 'translate('+margin.left+','+margin.top+')');
+
+            $( "#CountyLabel" ).hide("slow");
         }
 
     function returnState(id){
@@ -159,3 +205,6 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
 
 
 }
+
+
+
