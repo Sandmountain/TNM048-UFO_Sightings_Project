@@ -11,17 +11,32 @@
 
  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
  <script type="text/javascript" src="http://d3js.org/topojson.v3.min.js"></script>
- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+ <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>-->
+
 <!--<script src="https://d3js.org/d3-queue.v3.min.js"></script>-->
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
-
-<div id="PaneHolder">
-	<p id="StateName">Texas</p>
-	<p id="CountyName">Maryland</p>
-	<div id="lineChart"></div>
-	
+<div class="Title"><h1>Real Estate visualization of United States</h1>
 </div>
+<div id="PaneHolder">
+	<p id="StateName">Texas </p><img src="" id="flag"></img>
+	<!----<div id="lineChart"></div>-->
+	<p class="TextTitle">Information about state:</p>
+	<p class="TextInfromation">
+	In this city there are (data.population) inhabitants. Out of those inhabitants, (data.unemployed) are unemployed. 
+	The avarage house rent for a familiy in this area is (data.avgrent) and average yearly income is (data.yearlyIncome).
+	There are (data.man) and (data.women)
+		<br></br>
+	Out of the (data.population) inhabitants, (data.rent_gt_50) persons are considered really poor, and (data.rent_gt_10) are considred rich.
+	</p>
+	<div id="graph1"></div>
+	
+	<div id="graphHolder">
+		<div id="graph2"></div><div id="graph3"></div>
+	</div>
+</div>
+
 
 <div id="CountyLabel"><p> Orange County </p></div>
 <div id="usMap"></div>

@@ -1,15 +1,15 @@
 var worldMap, focus_plus_context, points;
-$( "#PaneHolder" ).hide();
+//$( "#PaneHolder" ).hide();
 $( "#CountyLabel" ).hide();
 
 d3.csv("./Database/real_estate_db.csv", function(data) {
   return {
+    city: data.city,
    	latitude: +data.lat,
    	longitude: +data.lng,
    	state: data.state,
     stateID: +data.STATEID,
     countyID: data.county,
-   	city: data.city,
    	pop: +data.pop,
    	male_pop: +data.male_pop,
    	female_pop: +data.female_pop,
