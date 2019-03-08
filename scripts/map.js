@@ -1,6 +1,3 @@
-
-
-
 function map(data){
 
 var margin = { top: 2, bottom: 2, left: 2, right:2}, 
@@ -11,8 +8,8 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
     active = d3.select(null),
     activeCounty = false,
     latestCounty = d3.select(null),
-    countyt,
     dataCities = scrubData(data),
+    StateMeanValues = MeanStateData(data,"hi_mean"),
     citiesData = (function () {
         var json = null;
         $.ajax({
@@ -26,7 +23,7 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
             }
         });
         return json;
-    })(); 
+    })();
     
     function scrubData(data){
         var scrubbed = [];
@@ -58,6 +55,11 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 //.range([2,3,4,5,6,7,8])
                 .range([0.01, 0.05, 0.1, 0.3, 0.5, 1, 4]);
 
+        var stateColors = d3.scaleQuantile()
+                .domain([50000, 55000, 60000, 65000, 700000, 80000, 90000])
+                .range(["#f1eef6", "#d0d1e6", "#a6bddb", "#74a9cf", "#3690c0","#0570b0", "#034e7b"]);
+
+
         var svg = d3.select('#usMap').append('svg')
             .attr('class', 'center-container')
             .attr('height', height + margin.top + margin.bottom)
@@ -85,12 +87,7 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
 
-      
-
-
         function ready(us) {
-
-            //plotta punkter
 
             g.append("g")
                 .attr("id", "counties")
@@ -102,27 +99,11 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .on("mouseover", function(d) {
                     hoverCounty(d);      
                 })
-
+            
+            //plotta punkter
             g.append("g")
-                .attr("id", "states")
-                .selectAll("path")
-                .data(topojson.feature(us, us.objects.states).features)
-                .enter().append("path")
-                .attr("d", path)
-                .attr("class", "state")
-                .on("click", clickedState)
-                .on("mouseover", function(d) {
-                    hoverState(d);      
-                })
-                
-
-            g.append("path")
-                .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-                .attr("id", "state-borders")
-                .attr("d", path);
-
-
-            g.append("g").selectAll("circle")
+                .attr("id","cityCircles")
+                .selectAll("circle")
                 .data(dataCities)
                 .enter().append("circle")
                 .attr("id","cityCircle")
@@ -158,6 +139,41 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .on("mouseover", function(d) {
                         hoverRing(d);      
                     });
+
+
+            g.append("g")
+                .attr("id", "states")
+                .selectAll("path")
+                .data(topojson.feature(us, us.objects.states).features)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("class", "state")
+                .attr("fill", function(d){
+                    var thisState = returnState(d.id);
+                   
+                    for(let i = 0; i < StateMeanValues.length; i++)
+                    {
+                        if(thisState == StateMeanValues[i].state)
+                        {
+                            
+                            return stateColors(StateMeanValues[i].hi_mean);
+                        }
+                    }
+                   
+                })
+                .on("click", clickedState)
+                .on("mouseover", function(d) {
+                    hoverState(d);      
+                })
+                
+
+            g.append("path")
+                .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+                .attr("id", "state-borders")
+                .attr("d", path);
+
+
+            
             /*    
             g.append("g")
                 .selectAll("circle")
@@ -201,9 +217,7 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .attr("font-size", "10px")
             */
         }
-
         
-      
 
         function clickedState(d) {
             if (d3.select('.background').node() === this) return reset();
@@ -213,20 +227,21 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
             *  Update the lineChart(s) with current data infromation
             *  (data from dataset)
             */
-
+            $("#cityCircles").fadeTo( "slow" , 1);
+            
             var filteredArray = data.filter( data => data.stateID === d.id ).map( obj => obj );
           
+            barChart(filteredArray, StateMeanValues);
+            //pieChart(filteredArray);
+            //IncomeGraph(filteredArray);
 
-            lineChart(filteredArray); 
-
-            /*
-            *   Set Div infromation
-            */
+            //   Set Div infromation      
             var clickedState = returnState(d.id);
             $( "#PaneHolder" ).show( "drop", { direction: "right" }, "fast" );
+            $( "#scatterPlot" ).show( "drop", { direction: "down" }, "fast" );
+            
             $( "#CountyName" ).hide();
             $( "#StateName" ).html(clickedState);
-            console.log(clickedState);
             $("#flag").attr("src", "./Database/flags/" + clickedState.toLowerCase() + "-small.png");
             
             //Set the clicked state to be active
@@ -242,6 +257,7 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 scale = 0.9 / Math.max(dx / width, dy / height),
                 translate = [width / 2 - scale * x, height / 2 - scale * y];
             
+
             //Transition to the new bounds
             g.transition()
                 .duration(750)
@@ -283,6 +299,7 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
             active = d3.select(null);
 
             $( "#PaneHolder" ).hide( "drop", { direction: "right" }, "fast" );
+            $( "#scatterPlot" ).hide( "drop", { direction: "down" }, "fast" );
 
             //transition back to the original position
             g.transition()
@@ -291,7 +308,8 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .style("stroke-width", "1.5px")
                 .attr('transform', 'translate('+margin.left+','+margin.top+')');
 
-            $( "#CountyLabel" ).hide( "drop", { direction: "left" }, "fast" );
+            $( "#CountyLabel" ).hide( "drop", { direction: "left" }, "fast" )
+            $("#cityCircles").fadeTo( "fast" , 0);
         }
 
         function returnState(id){
@@ -303,6 +321,103 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
 
 
 }
+
+
+function MeanStateData(data, input)
+    {
+        var state = [
+        {name:"Iowa", id: 0},
+        {name: "Delaware",id: 1},
+        {name:"District of Columbia",id: 2},
+        {name:"Florida" ,id: 3},
+        {name:"Georgia" ,id: 4},
+        {name:"Hawaii" ,id: 5},
+        {name:"Idaho" ,id: 6},
+        {name:"Illinois" ,id: 7},
+        {name:"Indiana" ,id: 8},
+        {name:"Kansas" ,id: 9},
+        {name:"Kentucky" ,id: 10},
+        {name:"Louisiana" ,id: 11},
+        {name:"Maine" ,id: 12},
+        {name:"Maryland" ,id: 13},
+        {name:"Massachusetts" ,id: 14},
+        {name:"Michigan" ,id: 15},
+        {name:"Minnesota" ,id: 16},
+        {name:"Mississippi" ,id: 17},
+        {name:"Missouri" ,id: 18},
+        {name:"Montana" ,id: 19},
+        {name:"Nebraska" ,id: 20},
+        {name:"Nevada" ,id: 21},
+        {name:"New Hampshire" ,id: 22},
+        {name:"New Jersey" ,id: 23},
+        {name:"New Mexico" ,id: 24},
+        {name:"New York" ,id: 25},
+        {name:"North Carolina" ,id: 26},
+        {name:"North Dakota" ,id: 27},
+        {name:"Ohio" ,id: 28},
+        {name:"Oklahoma" ,id: 29},
+        {name:"Oregon" ,id: 30},
+        {name:"Pennsylvania" ,id: 31},
+        {name:"Rhode Island" ,id: 32},
+        {name:"South Carolina" ,id: 33},
+        {name:"South Dakota" ,id: 34},
+        {name:"Tennessee" ,id: 35},
+        {name:"Texas" ,id: 36},
+        {name:"Utah" ,id: 37},
+        {name:"Vermont" ,id: 38},
+        {name:"Virginia" ,id: 39},
+        {name:"Washington" ,id: 40},
+        {name:"West Virginia" ,id: 41},
+        {name:"Wisconsin" ,id: 42},
+        {name:"Wyoming" ,id: 43},
+        {name:"Alabama" ,id: 44},
+        {name:"Alaska" ,id: 45},
+        {name:"Arizona" ,id: 46},
+        {name:"Arkansas" ,id: 47},
+        {name:"California" ,id: 48},
+        {name:"Colorado" ,id: 49},
+        {name:"Connecticut" ,id: 50}
+        ];
+
+        var filterData = [];
+        for (let i = 0; i < state.length; i++) 
+        {
+                
+            var filterDataItem = data.filter(function(d)
+            {
+                return d.state === state[i].name;
+                
+            });   
+            filterData[i] = filterDataItem;
+            
+        }
+
+        var stateCount = filterData.length;
+        var state_mean = [];
+        
+        for (let i = 0; i < stateCount; i++) 
+        {
+            state_mean[i] = {[input]: 0, state: ""};
+
+            for (let j = 0; j < filterData[i].length; j++) 
+            {
+                if (isNaN(filterData[i][j][input])) 
+                {
+                    continue;
+                }
+                else
+                {
+                    state_mean[i][input] += filterData[i][j][input];
+                    
+                }
+            }
+
+            state_mean[i][input] /= filterData[i].length;
+            state_mean[i].state = filterData[i][0].state;
+        }
+
+        return state_mean;
+    }
 
 
 

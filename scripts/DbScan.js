@@ -1,180 +1,118 @@
-function DbScan()
+function dbScan(DataOfInt1x,DataOfInt2y, eps, minPts, data)
 {
-    var eps;
-    var minPts;
-    var data = [];
-	var clusters = [];
-	var status = [];
-	var distance = euclidean_distance;
-	
-    //distance function
-    function euclidean_distance(point1, point2) {
-        return Math.sqrt(Math.pow((point2.x - point1.x), 2) + Math.pow((point2.y - point1.y), 2));
+    var clusters = []; //Cluster array we will save each index belonging to a cluster at each index.
+
+    var status = []; //Which cluster a certain index of the data belongs to.
+    
+    //euclidean_distance function
+    function euclidean_distance(dataPoint1, dataPoint2) 
+    {
+        
+        var euc_dist = Math.sqrt(Math.pow((dataPoint2[DataOfInt1x] - dataPoint1[DataOfInt1x]), 2) + Math.pow((dataPoint2[DataOfInt2y] - dataPoint1[DataOfInt2y]), 2));
+        return euc_dist;
     }
 
-    //Core Algorithm Related
-    function get_region_neighbours(point_idx) {
+    //Getting the neighbours of a certain point.
+    function get_region_neighbours(point_idx) 
+    {
         var neighbours = [];
         var d = data[point_idx];
 
-        for (var i = 0; i < data.length; i++) {
-            if (point_idx === i) {
+        for (var i = 0; i < data.length; i++) 
+        {
+            if (point_idx === i)
+            {
                 continue;
             }
-            if (distance(data[i], d) <= eps) {
-                neighbours.push(i);
-            } else if (distance(data[i], d) <= eps) {
+            if (euclidean_distance(data[i], d) <= eps) 
+            {
                 neighbours.push(i);
             }
         }
-
         return neighbours;
     }
 
-    function expand_cluster(point_idx, neighbours, cluster_idx) {
-        clusters[cluster_idx - 1].push(point_idx); //add point to cluster
-        status[point_idx] = cluster_idx;	//assign cluster id
 
-        for (var i = 0; i < neighbours.length; i++) {
+    //Function for going through the data and expanding the clusters. This is done recursivly till we have gone through all points that should be a part of the cluster.
+    function expand_cluster(point_idx, neighbours, cluster_idx) 
+    {
+        clusters[cluster_idx - 1].push(point_idx); //adding a point to the current cluster index
+        status[point_idx] = cluster_idx;	//Assign the cluster index to the point that was added to the cluster
+
+        for (var i = 0; i < neighbours.length; i++) 
+        {
             var curr_point_idx = neighbours[i];
-            if (status[curr_point_idx] === undefined) {
+
+            if (status[curr_point_idx] === undefined) 
+            {
                 status[curr_point_idx] = 0; //visited and marked as noise by default
+                
                 var curr_neighbours = get_region_neighbours(curr_point_idx);
                 var curr_num_neighbours = curr_neighbours.length;
-                if (curr_num_neighbours >= minPts) {
+                
+                if (curr_num_neighbours >= minPts) 
+                {
                     expand_cluster(curr_point_idx, curr_neighbours, cluster_idx);
                 }
             }
 
-            if (status[curr_point_idx] < 1) { // not assigned to a cluster but visited (= 0)
+            if (status[curr_point_idx] < 1) // not assigned to a cluster but visited (= 0)
+            { 
                 status[curr_point_idx] = cluster_idx;
                 clusters[cluster_idx - 1].push(curr_point_idx);
             }
         }
     }
+    
 
-    var dbscan = function () {
-        status = [];
-        clusters = [];
-
-        for (var i = 0; i < data.length; i++) {
-            if (status[i] === undefined) {
-                status[i] = 0; //visited and marked as noise by default
-                var neighbours = get_region_neighbours(i);
-                var num_neighbours = neighbours.length;
-                if (num_neighbours < minPts) {
-                    status[i] = 0; //noise
-                } else {
-                    clusters.push([]); //empty new cluster
-                    var cluster_idx = clusters.length;
-                    expand_cluster(i, neighbours, cluster_idx);
-                }
-            }
-        }
-
-        return status;
-    };
-        
-    //Resulting Clusters Center Points
-    dbscan.getClusters = function () {
-        var num_clusters = clusters.length;
-        var clusters_centers = [];
-
-        for (var i = 0; i < num_clusters; i++) {
+    for (var i = 0; i < data.length; i++) 
+    {
+        if (status[i] === undefined) {
             
-            clusters_centers[i] = {x: 0, y: 0};
-
-            for (var j = 0; j < clusters[i].length; j++) {
-                clusters_centers[i].x += data[clusters[i][j]].x;
-                clusters_centers[i].y += data[clusters[i][j]].y;
+            status[i] = 0; //visited and marked as noise by default
+            var neighbours = get_region_neighbours(i);
+            var num_neighbours = neighbours.length;
+            
+            //If a point does not have enough neighbours we mark it as noise.
+            if (num_neighbours < minPts) 
+            {
+                status[i] = 0; //noise
+            } 
+            else 
+            {
+                //If a point have enough neighbours we create a new cluster.
+                clusters.push([]); //empty new cluster
+                var cluster_idx = clusters.length;
+                expand_cluster(i, neighbours, cluster_idx);
             }
-
-            clusters_centers[i].x /= clusters[i].length;
-            clusters_centers[i].y /= clusters[i].length;
-            clusters_centers[i].dimension = clusters[i].length;
-            clusters_centers[i].parts = clusters[i];
-
         }
+    }
+           
+    //Saving all the important cluster data inside the array cluster_centers array 
+    var num_clusters = clusters.length;
+    var clusters_centers = [];
 
-        return clusters_centers;
-    };
+    for (var i = 0; i < num_clusters; i++) 
+    {
+        clusters_centers[i] = {x: 0, y: 0};
+
+        for (var j = 0; j < clusters[i].length; j++) 
+        {
+            clusters_centers[i].x += data[clusters[i][j]][DataOfInt1x];
+            clusters_centers[i].y += data[clusters[i][j]][DataOfInt2y];
+        }
         
-        //Getters and setters
-		dbscan.data = function (d) {
-			if (arguments.length === 0) {
-				return data;
-			}
-			if (Array.isArray(d)) {
-				data = d;
-			}
+        //Calculating the center point of the cluster
+        clusters_centers[i].x /= clusters[i].length; 
+        clusters_centers[i].y /= clusters[i].length;
 
-			return dbscan;
-		};
+        //The amount of clusters 
+        clusters_centers[i].dimension = clusters[i].length;
 
-		dbscan.eps = function (e) {
-			if (arguments.length === 0) {
-				return eps;
-			}
-			if (typeof e === "number") {
-				eps = e;
-			}
+        //The index of all the datapoints inside the cluster i
+        clusters_centers[i].parts = clusters[i];
 
-			return dbscan;
-		};
-
-		dbscan.timeEps = function (e) {
-			if (arguments.length === 0) {
-				return time_eps;
-			}
-			if (typeof e === "number") {
-				time_eps = e;
-			}
-
-			return dbscan;
-		};
-
-		dbscan.minPts = function (p) {
-			if (arguments.length === 0) {
-				return minPts;
-			}
-			if (typeof p === "number") {
-				minPts = p;
-			}
-
-			return dbscan;
-		};
-
-		dbscan.distance = function (fct) {
-			if (arguments.length === 1) {
-				if (typeof fct === 'string') {
-					switch (fct) {
-						case 'HAVERSINE':
-							distance = haversine_distance;
-							break;
-						case 'EUCLIDEAN':
-							distance = euclidean_distance;
-							break;
-						case 'MANHATTAN':
-							distance = manhattan_distance;
-							break;
-						default:
-							distance = euclidean_distance;
-					}
-				} else if (typeof fct === 'function') {
-					distance = fct;
-				}
-			}
-
-			return dbscan;
-		};
-
-		dbscan.timeDistance = function (fct) {
-			if (arguments.length === 1) {
-				time_distance = fct;
-			}
-
-			return dbscan;
-		};
-
-		return dbscan;
-	}
+    }
+    //Returning the result of the DBScan
+    return clusters_centers;
+}

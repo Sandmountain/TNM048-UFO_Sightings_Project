@@ -1,6 +1,5 @@
 html, body {
   height: 100%;
-  overflow:hidden;
 }
 
 .Title{
@@ -22,8 +21,8 @@ html, body {
   font-size: 12px;
 }
 
-#graph1{
-  background: white;
+#barChart{
+  
   width: 100%;
   height: 200px;
 }
@@ -33,16 +32,25 @@ html, body {
 #graph2{
   float:left;
   background: rgb(180, 180, 180);
-  width: 65%;
-  height: 100px;
+  width: 60%;
+  height: 120px;
 }
-#graph3{
+#pieChart{
   float:left;
   background: gray;
-  width: 35%;
-  height: 100px;
+  width: 40%;
+  height: 120px;
 }
 
+#scatterPlot{
+  width: 70%;
+  height: 400px;
+  background:#aaa;
+}
+#scatterPlotGraph{
+  padding-left: 5px;
+  padding-right: 5px;
+}
 
 
 #flag{
@@ -59,7 +67,7 @@ html, body {
   padding-left: 10px;
   padding-right: 10px;
   background-color: #ccc;
-  position: absolute;
+  position: fixed;
   top: 0%;
   right: 0%;
   z-index: 1;
@@ -73,7 +81,7 @@ html, body {
 
 #usMap { 
   padding-top: 45px;
-	height: 100%;
+	height: 584px;
   width: 70%;
 	z-index: 1;
   position: centre;
@@ -100,7 +108,6 @@ html, body {
 }
 
 #states {
-    fill: rgb(170, 170, 170);
     cursor: zoom-in;
 }
 
@@ -160,4 +167,8 @@ html, body {
    cursor: pointer;
    stroke-width: 1px;
    stroke:white;  
+}
+
+#cityCircles{
+  opacity: 0;
 }
