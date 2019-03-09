@@ -10,7 +10,9 @@ function barChart(filteredData,state_hi_mean_data)
     const height = $("#barChart").height();
     var innerWidth = width - margin.right - margin.left;
     var innerHeight = height - margin.bottom -  margin.top;
-
+   
+    state_hi_mean_data = state_hi_mean_data.sort(function(a,b){return a.hi_mean > b.hi_mean}).reverse();
+  
     if(firstCheck == 0){
         xScale = d3.scaleBand()
             .domain(state_hi_mean_data.map(xValue))
@@ -27,7 +29,6 @@ function barChart(filteredData,state_hi_mean_data)
         svg = d3.select("#barChart").append("svg")
             .attr("width", width)
             .attr("height", height);
-
 
         g = svg.append("g")
             .attr("transform", "translate("+ margin.left + "," + margin.top + ")")
@@ -51,25 +52,25 @@ function barChart(filteredData,state_hi_mean_data)
             .enter()
             .append("rect")
             .attr("class", "bar")
-            .style("fill", function(d,i){
-                if(d.state == filteredData[0].state)
-                {
-                    return "yellow";
-                }
-                else
-                    return "steelblue";            
-            })
-            .attr("y", d => yScale(yValue(d)))
-            .attr("x", d => xScale(xValue(d)))
-            .attr("height", d => yScale(0) - yScale(yValue(d)))
-            .attr("width", xScale.bandwidth());
-            
+                .style("fill", function(d,i){
+                    if(d.state == filteredData[0].state)
+                    {
+                        return "yellow";
+                    }
+                    else
+                        return "steelblue";            
+                })
+                .attr("y", d => yScale(yValue(d)))
+                .attr("x", d => xScale(xValue(d)))
+                .attr("height", d => yScale(0) - yScale(yValue(d)))
+                .attr("width", xScale.bandwidth());
+                
+                
             firstCheck = 1;
         }
         
     else{
         
-        console.log("hej")
         updateData(filteredData,state_hi_mean_data);
     }
 

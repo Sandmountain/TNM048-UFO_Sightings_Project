@@ -106,7 +106,7 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .selectAll("circle")
                 .data(dataCities)
                 .enter().append("circle")
-                .attr("id","cityCircle")
+                .attr("id","cityCircle") //.attr("id",function(d){return d.id})
                 .attr("cx", function (d) { 
                     if(projection([d[0].longitude,d[0].latitude])) {
                         return projection([d[0].longitude,d[0].latitude])[0];
@@ -232,8 +232,8 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
             var filteredArray = data.filter( data => data.stateID === d.id ).map( obj => obj );
           
             barChart(filteredArray, StateMeanValues);
-            //pieChart(filteredArray);
-            //IncomeGraph(filteredArray);
+            pieChart(filteredArray);
+            IncomeGraph(filteredArray);
 
             //   Set Div infromation      
             var clickedState = returnState(d.id);

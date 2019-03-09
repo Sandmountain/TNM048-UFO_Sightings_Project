@@ -26,7 +26,7 @@ d3.csv("./Database/real_estate_db.csv", function(data) {
   };	
 }).then(function(data){
 	usMap = new map(data);
-	pieChart = new pieChart(data);
+	//pieChart = new pieChart(data);
 	//barChart = new barChart(data);
 	//IncomeGraph = new IncomeGraph(data);
   
