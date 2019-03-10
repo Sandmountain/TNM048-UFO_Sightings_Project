@@ -147,6 +147,7 @@ function IncomeGraph(filteredArray){
             .on("mouseover", function(d){
                    $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });
                    scatterInfo(d);    
+                   $( "#scatterInfo" ).show(); 
                 })
             .on("mouseout", function(d){
                     $("." + d.UID).css({"stroke": "yellow", "stroke-width": "0px" });    
