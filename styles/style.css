@@ -177,7 +177,7 @@ html, body {
 }
 
 .state:hover{
-  filter: brightness(90%);
+  fill:rgb(207, 207, 207);
 }
 
 .InformationPane{

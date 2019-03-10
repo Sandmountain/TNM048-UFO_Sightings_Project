@@ -11,7 +11,7 @@ function barChart(filteredData,state_hi_mean_data)
     var innerWidth = width - margin.right - margin.left;
     var innerHeight = height - margin.bottom -  margin.top;
     
-    state_hi_mean_data2 = state_hi_mean_data.sort(function(a,b){return a.hi_mean > b.hi_mean}).reverse();
+    state_hi_mean_data2 = state_hi_mean_data.sort(function(a,b){return (a.hi_mean)>( b.hi_mean)});
   
     if(firstCheck == 0){
         xScale = d3.scaleBand()
