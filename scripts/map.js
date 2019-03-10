@@ -192,7 +192,7 @@ function map(data){
                     return scaleQuantColor(totalPopulation);
                 })
                 .on("mouseover", function(d){
-                    $("." + d[0].UID).css({"stroke": "red", "stroke-width": "2 px" });   
+                    $("." + d[0].UID).css({"stroke": "red", "stroke-width": "2px" });   
                     mapInfo(d);  
                     $( "#scatterInfo" ).show();   
                 })
