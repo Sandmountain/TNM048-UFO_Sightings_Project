@@ -89,6 +89,7 @@ html, body {
 #ZoomMenu{
   cursor:pointer;
   position: fixed;
+  z-index: 10;
   border-radius: 5px;
   background: white;
   width: 30px;
@@ -100,6 +101,7 @@ html, body {
   -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+  
 }
 
 #HorizontalLine{
@@ -108,7 +110,9 @@ html, body {
   width: 30px;
 }
 #ZoomIn{
+
   padding-bottom: 2px;
+
 }
 #ZoomIn:hover{
   background: rgb(204, 204, 204);
@@ -125,14 +129,19 @@ html, body {
 }
 
 #CountyLabel{
-  position: absolute;
-  left:0%;
-  bottom: 50%;
+  position: fixed;
+  top: 78px;
+  left: 40px;
+  padding-top: 3px;
   text-align: center;
-  background: rgb(105, 105, 105);
+  background: #aaa;
   width: 120px;
-  z-index: 2;
-
+  height: 25px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
  }
 
 
@@ -203,4 +212,19 @@ html, body {
 
 #dotContext{
   cursor: pointer;
+}
+
+#scatterInfo{
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-bottom: 5px;
+  width: 210px;
+  position: absolute;
+  background: #aaa;
+  top: 50%;
+  left: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
 }

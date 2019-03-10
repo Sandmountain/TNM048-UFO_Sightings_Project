@@ -37,9 +37,6 @@ function IncomeGraph(filteredArray){
         .range(d3.schemeBlues[4])
         .domain([0, 4]);
             
-
-     
-     
      
 
     if(firstCheckScatterPlot == 0)
@@ -242,21 +239,24 @@ function IncomeGraph(filteredArray){
 
 function scatterInfo(data)
 {
-    
+    $("#infoPanel").html("Point Info")
     var scatterInfo = d3.select("#scatterInfo")
 
     scatterInfo
         .select("#hi_mean_info")
-        .text("Mean income: " + data[xInput]);
+        .html("Yearly income: $<b>" + Math.round(data[xInput])+ "</b>");
     scatterInfo
         .select("#pop_info")
-        .text("Population: " + data.pop);
+        .html("Population: <b>" + data.pop+"</b> people");
     scatterInfo
         .select("#mortgage_info")
-        .text("Average mortgage: " + data[yInput]);
+        .html("Average HS degree: <b>" + Math.round(data[yInput]*100)+ "</b>%") ;
     scatterInfo
         .select("#city_info")
-        .text("City: " + data.city);
+        .html("City: <b>" + data.city + "</b>");
+    scatterInfo
+        .select("#place_info")
+        .html("Area: <b>" + data.place + "</b>");
     
 }
     
