@@ -52,6 +52,8 @@ function pieChart(filteredArray)
             
         arc.append("path")
             .attr("d", path)
+            .attr("stroke", "white")
+            .attr("stroke-width", "0.5px")
             .attr("fill", function(d)
             {
                 return color(d.data.type);
@@ -146,6 +148,8 @@ function pieChart(filteredArray)
             
         arc.append("path")
             .attr("d", path)
+            .attr("stroke", "white")
+            .attr("stroke-width", "0.5px")
             .attr("fill", function(d)
             {
                 return color(d.data.type);
