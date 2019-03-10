@@ -1,20 +1,21 @@
 //g, svg,xAxis,yAxis, xScale, yScale, xValue, yValue;
 var firstCheckScatterPlot = 0,
-    xAxisScatterPlot, yAxisScatterPlot, xScaleScatterPlot, yScaleScatterPlot, scatterPlot;
+    xAxisScatterPlot, yAxisScatterPlot, xScaleScatterPlot, yScaleScatterPlot, scatterPlot, xInput, yInput;
 
 function IncomeGraph(filteredArray){
-    var margin = {top: 20, right: 20, bottom: 150, left: 40};
+    var margin = {top: 20, right: 20, bottom: 150, left: 70};
     const svgWidth = $("#scatterPlot").width();
     const svgHeight = $("#scatterPlot").height();
     var innerWidth = svgWidth - margin.right - margin.left;
     var innerHeight = svgHeight - margin.bottom - margin.top;
-
+    xInput = "hi_mean";
+    yInput = "hs_degree";
     //Setting scale parameters
-    var maxIncome = d3.max(filteredArray, d => d.hi_mean);
-    var minIncome = d3.min(filteredArray, d => d.hi_mean);
+    var maxIncome = d3.max(filteredArray, d => d[xInput]);
+    var minIncome = d3.min(filteredArray, d => d[xInput]);
 
-    var maxDept = d3.max(filteredArray, d => d.hc_mortgage_mean);
-    var minDept = d3.min(filteredArray, d => d.hc_mortgage_mean);
+    var maxDept = d3.max(filteredArray, d => d[yInput]);
+    var minDept = d3.min(filteredArray, d => d[yInput]);
 
     xScaleScatterPlot = d3.scaleLinear()
         .range([0, innerWidth])
@@ -28,9 +29,18 @@ function IncomeGraph(filteredArray){
     yAxisScatterPlot = d3.axisLeft(yScaleScatterPlot);
 
      //TODO: räkna ut antalet
-     var clusters = dbScan('hi_mean','hc_mortgage_mean', 2000, 50, filteredArray);
-     console.log("Cluster lengh: "+ clusters.length);
-     console.log(clusters);
+    var clusters = dbScan(xInput,yInput, 4000, 20, filteredArray);
+
+    console.log("Cluster lengh: "+ clusters.length);
+    console.log(clusters);
+    var clusterColor = d3.scaleQuantile()
+        .range(d3.schemeBlues[4])
+        .domain([0, 4]);
+            
+
+     
+     
+     
 
     if(firstCheckScatterPlot == 0)
     {
@@ -47,7 +57,17 @@ function IncomeGraph(filteredArray){
             .attr('text-anchor', "end")
             .attr('dy', ".75em")
             .style("font-size", "20px")
-            .text("Magnitude");
+            .text(yInput);
+
+        svg.append("text")
+            .attr('class', "axis-label")
+            //.attr("transform", "rotate(-90)")
+            .attr("y", 280)
+            .attr("x", 666)
+            .attr('text-anchor', "middle")
+            .attr('dy', ".75em")
+            .style("font-size", "20px")
+            .text(xInput);
         
         scatterPlot = svg.append("g")
             .attr("class", "scatterPlot")
@@ -66,46 +86,46 @@ function IncomeGraph(filteredArray){
             .domain([20000, 50000, 100000, 150000])
             .range([2, 3, 4, 5]);
         
-        var dots = scatterPlot.append("g")
-            .attr("clip-path", "url(#clip)");
+        var dots = scatterPlot.append("g");
 
-        dots.selectAll("dot")
+        dotContext = dots.selectAll("dot")
             .data(filteredArray)
             .enter().append("circle")
             .attr("class", "dotContext")
             .attr("cx", function(d,i) 
             {
-                if (isNaN(xScaleScatterPlot(d.hi_mean))) 
+                if (isNaN(xScaleScatterPlot(d[xInput]))) 
                 {
                     return 0;
                 }
                 else
                 {
-                    return xScaleScatterPlot(d.hi_mean);
+                    return xScaleScatterPlot(d[xInput]);
                 }
             })
             .attr("cy", function(d,i) 
             {
-                if (isNaN(yScaleScatterPlot(d.hc_mortgage_mean))) 
+                if (isNaN(yScaleScatterPlot(d[yInput]))) 
                 {
                     return 0;
                 }
                 else
                 {
-                    return yScaleScatterPlot(d.hc_mortgage_mean);
+                    return yScaleScatterPlot(d[yInput]);
                 }
             })
             .attr("r", function(d) 
             {
-                return scaleQuantRad(d.hi_mean);
+                return scaleQuantRad(d[xInput]);
             })
             .attr("fill", function(d,i)
             {
+                
                 for (let index = 0; index < clusters.length; index++) 
                 {
                     if (clusters[index].parts.includes(i)) 
                     {
-                        if (index == 0) 
+                        /*if (index == 0) 
                         {
                             return "#ff0000";
                         }
@@ -113,10 +133,39 @@ function IncomeGraph(filteredArray){
                         {
                             return "#00ff00";
                         }
+                        else if(index == 2)
+                        {
+                            return "#0000ff";
+                        }
+                        else if(index == 3)
+                        {
+                            return "#aaa";
+                        }*/
+                        return clusterColor(index);
                     }
                 }
                 return "#000000";
+            })
+            .on("mouseover", function(d)
+            {
+                scatterInfo(d);    
+                
+                d3.select(this)
+                    .attr("r", function(d)
+                    {
+                        console.log("hej");
+                        return 15;
+                    });
+            })
+            .on("mouseout", function(d)
+            {
+                d3.select(this)
+                    .attr("r", function(d)
+                    {
+                        return scaleQuantRad(d[xInput]);
+                    });
             });
+
     firstCheckScatterPlot = 1;
     }
     else{
@@ -129,59 +178,105 @@ function IncomeGraph(filteredArray){
         .domain([20000, 50000, 100000, 150000])
         .range([2, 3, 4, 5]);
     
-    var dots = scatterPlot.append("g")
-        .attr("clip-path", "url(#clip)");
+    var dots = scatterPlot.append("g");
+
         
-    dots.selectAll("dot")
+    dotContext = dots.selectAll("dot")
         .data(filteredArray)
         .enter().append("circle")
         .attr("class", "dotContext")
         .attr("cx", function(d,i) 
         {
-            if (isNaN(xScaleScatterPlot(d.hi_mean))) 
+            if (isNaN(xScaleScatterPlot(d[xInput]))) 
             {
                 return 0;
             }
             else
             {
-                return xScaleScatterPlot(d.hi_mean);
+                return xScaleScatterPlot(d[xInput]);
             }
         })
         .attr("cy", function(d,i) 
         {
-            if (isNaN(yScaleScatterPlot(d.hc_mortgage_mean))) 
+            if (isNaN(yScaleScatterPlot(d[yInput]))) 
             {
                 return 0;
             }
             else
             {
-                return yScaleScatterPlot(d.hc_mortgage_mean);
+                return yScaleScatterPlot(d[yInput]);
             }
         })
         .attr("r", function(d) 
         {
-            return scaleQuantRad(d.hi_mean);
+            return scaleQuantRad(d[xInput]);
         })
         .attr("fill", function(d,i)
         {
             for (let index = 0; index < clusters.length; index++) 
-            {
-                if (clusters[index].parts.includes(i)) 
                 {
-                    if (index == 0) 
+                    if (clusters[index].parts.includes(i)) 
                     {
-                        return "#ff0000";
-                    }
-                    else if(index == 1)
-                    {
-                        return "#00ff00";
+                        /*if (index == 0) 
+                        {
+                            return "#ff0000";
+                        }
+                        else if(index == 1)
+                        {
+                            return "#00ff00";
+                        }
+                        else if(index == 2)
+                        {
+                            return "#0000ff";
+                        }
+                        else if(index == 3)
+                        {
+                            return "#aaa";
+                        }*/
+                        return clusterColor(index);
                     }
                 }
-            }
-            return "#000000";
+                return "#000000";
+        })
+        .on("mouseover", function(d)
+        {
+            scatterInfo(d);    
+            
+            d3.select(this)
+                .attr("r", function(d)
+                {
+                    console.log("hej");
+                    return 15;
+                });
+        })
+        .on("mouseout", function(d)
+        {
+            d3.select(this)
+                .attr("r", function(d)
+                {
+                    return scaleQuantRad(d[xInput]);
+                });
         });
     }
-    
-
-
 }
+
+function scatterInfo(data)
+{
+    
+    var scatterInfo = d3.select("#scatterInfo")
+
+    scatterInfo
+        .select("#hi_mean_info")
+        .text("Mean income: " + data[xInput]);
+    scatterInfo
+        .select("#pop_info")
+        .text("Population: " + data.pop);
+    scatterInfo
+        .select("#mortgage_info")
+        .text("Average mortgage: " + data[yInput]);
+    scatterInfo
+        .select("#city_info")
+        .text("City: " + data.city);
+    
+}
+    

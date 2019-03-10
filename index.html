@@ -21,7 +21,12 @@
 </div>
 <div id="PaneHolder">
 	<p id="StateName">Texas </p><img src="" id="flag"></img>
-	<div id="barChart"></div>
+	<div id="barChart">
+		<div id="tooltip-group" style="display:none;position:absolute;z-index:1001;background-color:gray">
+			<div id="state-tooltip" style="display:none;position:absolute;z-index:1001;background-color:gray"></div>
+			<div id="hi_mean-tooltip" style="display:none;position:absolute;z-index:1001;background-color:gray"></div>
+		</div>
+	</div>
 	<!----<div id="lineChart"></div>-->
 	<p class="TextTitle">Information about state:</p>
 	<p class="TextInfromation">
@@ -35,6 +40,13 @@
 	
 	<div id="graphHolder">
 		<div id="pieChart"></div>
+	</div>
+	<div id="scatterInfo">
+		<h5>Scatter info</h5>
+		<div id="hi_mean_info"><p>Mean income</p></div>
+		<div id="pop_info"><p>pop</p></div>
+		<div id="mortgage_info"><p>mortgage</p></div>		
+		<div id="city_info"><p>city</p></div>			
 	</div>
 </div>
 

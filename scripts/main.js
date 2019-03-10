@@ -1,4 +1,4 @@
-
+var IncomeGraph, barChart, pieChart;
 //$( "#PaneHolder" ).hide();
 $( "#CountyLabel" ).hide();
 
@@ -22,7 +22,8 @@ d3.csv("./Database/real_estate_db.csv", function(data) {
   	hc_mortgage_stdev: +data.hc_mortgage_stdev,
   	hi_mean: +data.hi_mean,
   	hi_samples: +data.hi_samples,
-  	hi_stdev: +data.hi_stdev,
+	hi_stdev: +data.hi_stdev,
+	rent_gt_50: +data.rent_gt_50
   };	
 }).then(function(data){
 	usMap = new map(data);

@@ -63,7 +63,45 @@ function barChart(filteredData,state_hi_mean_data)
                 .attr("y", d => yScale(yValue(d)))
                 .attr("x", d => xScale(xValue(d)))
                 .attr("height", d => yScale(0) - yScale(yValue(d)))
-                .attr("width", xScale.bandwidth());
+                .attr("width", xScale.bandwidth())
+                .on("mouseover", function(d, i)
+                {
+                    var current_pos = d3.mouse(this);
+                    console.log(current_pos);
+                    d3.select(this)
+                        .style("fill", "green");
+
+                        var tooltipDiv = document.getElementById('tooltip-group');
+                        var tooltipState = document.getElementById("state-tooltip");
+                        var tooltipHimean = document.getElementById("hi_mean-tooltip");
+                        tooltipState.innerHTML = d.state ;
+                        tooltipHimean.innerHTML = d.hi_mean;
+                        tooltipDiv.style.top = "60px";
+                        tooltipDiv.style.left = current_pos[0]+'px';
+                        tooltipDiv.style.display = "block";
+                        tooltipState.style.top = "60px";
+                        tooltipState.style.left = current_pos[0]+'px';
+                        tooltipState.style.display = "block";
+                        tooltipHimean.style.top = "60px";
+                        tooltipHimean.style.left = current_pos[0]+'px';
+                        tooltipHimean.style.display = "block";
+                })
+                .on("mouseout", function(d,i)
+                {
+                    d3.select(this)
+                        .style("fill", function(d,i){
+                            if(d.state == filteredData[0].state)
+                            {
+                                return "yellow";
+                            }
+                            else
+                                return "steelblue";            
+                        });
+
+                    //d3.select(this).style("fill", "white");
+                    var tooltipDiv = document.getElementById('tooltip-group');
+                    tooltipDiv.style.display = "none";
+                });
                 
                 
             firstCheck = 1;
@@ -94,7 +132,45 @@ function barChart(filteredData,state_hi_mean_data)
             .attr("y", d => yScale(yValue(d)))
             .attr("x", d => xScale(xValue(d)))
             .attr("height", d => yScale(0) - yScale(yValue(d)))
-            .attr("width", xScale.bandwidth());
+            .attr("width", xScale.bandwidth())
+            .on("mouseover", function(d, i)
+                {
+                    var current_pos = d3.mouse(this);
+                    console.log(current_pos);
+                    d3.select(this)
+                        .style("fill", "green");
+
+                        var tooltipDiv = document.getElementById('tooltip-group');
+                        var tooltipState = document.getElementById("state-tooltip");
+                        var tooltipHimean = document.getElementById("hi_mean-tooltip");
+                        tooltipState.innerHTML = d.state ;
+                        tooltipHimean.innerHTML = d.hi_mean;
+                        tooltipDiv.style.top = "60px";
+                        tooltipDiv.style.left = current_pos[0]+'px';
+                        tooltipDiv.style.display = "block";
+                        tooltipState.style.top = "60px";
+                        tooltipState.style.left = current_pos[0]+'px';
+                        tooltipState.style.display = "block";
+                        tooltipHimean.style.top = "60px";
+                        tooltipHimean.style.left = current_pos[0]+'px';
+                        tooltipHimean.style.display = "block";
+                })
+                .on("mouseout", function(d,i)
+                {
+                    d3.select(this)
+                        .style("fill", function(d,i){
+                            if(d.state == filteredData[0].state)
+                            {
+                                return "yellow";
+                            }
+                            else
+                                return "steelblue";            
+                        });
+
+                    //d3.select(this).style("fill", "white");
+                    var tooltipDiv = document.getElementById('tooltip-group');
+                    tooltipDiv.style.display = "none";
+                });
     }
     
 }

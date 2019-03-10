@@ -98,7 +98,7 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .attr("class", "county-boundary")
                 .on("mouseover", function(d) {
                     hoverCounty(d);      
-                })
+                });
             
             //plotta punkter
             g.append("g")
@@ -172,8 +172,6 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .attr("id", "state-borders")
                 .attr("d", path);
 
-
-            
             /*    
             g.append("g")
                 .selectAll("circle")
@@ -217,6 +215,8 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
                 .attr("font-size", "10px")
             */
         }
+        
+
         
 
         function clickedState(d) {
@@ -266,6 +266,8 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
         }
 
 
+
+       
         function hoverCounty(d){
             
             //checks wether a county has been clicked or not 
@@ -322,9 +324,8 @@ var margin = { top: 2, bottom: 2, left: 2, right:2},
 
 }
 
-
 function MeanStateData(data, input)
-    {
+{
         var state = [
         {name:"Iowa", id: 0},
         {name: "Delaware",id: 1},

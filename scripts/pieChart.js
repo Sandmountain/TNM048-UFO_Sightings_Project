@@ -1,5 +1,5 @@
 var firstCheckPie = 0,
-    pieChartGroup;
+    pieChartGroup, ledgends;
 
 function pieChart(filteredArray)
 {    
@@ -58,15 +58,58 @@ function pieChart(filteredArray)
             });
             
         arc.append("text")
+            /*
             .attr("transform", function(d)
             {
                 return "translate(" + labelArc.centroid(d) + ")";
             })
-            .attr("dy", ".10em")
+            */
+            .attr("x", function(d)
+            {
+                return labelArc.centroid(d)[0];
+            })
+            .attr("y", function(d)
+            {
+                return labelArc.centroid(d)[1];
+            })
+            //.attr("dy", ".10em")
+            .style("font-size", 10);
+            /*
             .text(function(d)
             {
-                return d.data.type;
-            }); 
+                return Math.round((d.data.count * 100) * 100) / 100 + "%";
+            });*/ 
+
+            ledgends = svg.append("g").attr("transform", "translate(170,-15)")
+
+            var legend = ledgends
+                .selectAll(".ledgends")
+                .data(meanHsDegree)
+                .enter().append("g")
+                .classed("ledgends", true)
+                .attr("transform", function(d,i)
+                {
+                    return "translate(0," + (i+1)*25 + ")";
+                });
+
+            legend.append("rect")
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("fill", function(d)
+                {
+                    return color(d.type);
+                });
+
+            legend.append("text")
+                .text(function(d)
+                {
+                    return Math.round((d.count * 100) * 100) / 100 + "%  " + d.type;
+                })
+                .attr("fill", "black")
+                .style("font-size", 12)
+                .attr("x", 25)
+                .attr("y", 15);
+                
             firstCheckPie = 1;
     }
     else{
@@ -77,6 +120,7 @@ function pieChart(filteredArray)
     function updateData(filteredArray)
     {
         d3.selectAll(".pieChart").remove();
+        d3.selectAll(".ledgends").remove();
         
         var labelArc = d3.arc()
         .outerRadius(radius - 40)
@@ -107,16 +151,50 @@ function pieChart(filteredArray)
                 return color(d.data.type);
             });
             
-        arc.append("text")
-            .attr("transform", function(d)
+            arc.append("text")
+            .attr("x", function(d)
             {
-                return "translate(" + labelArc.centroid(d) + ")";
+                return labelArc.centroid(d)[0];
             })
-            .attr("dy", ".10em")
+            .attr("y", function(d)
+            {
+                return labelArc.centroid(d)[1];
+            })
+            //.attr("dy", ".10em")
+            .style("font-size", 10);
+            /*
             .text(function(d)
             {
-                return d.data.type;
-            }); 
+                return Math.round((d.data.count * 100) * 100) / 100 + "%";
+            });*/              
+            
+            var legend = ledgends
+                .selectAll(".ledgends")
+                .data(meanHsDegree)
+                .enter().append("g")
+                .classed("ledgends", true)
+                .attr("transform", function(d,i)
+                {
+                    return "translate(0," + (i+1)*25 + ")";
+                });
+
+            legend.append("rect")
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("fill", function(d)
+                {
+                    return color(d.type);
+                });
+
+            legend.append("text")
+                .text(function(d)
+                {
+                    return Math.round((d.count * 100) * 100) / 100 + "%  " + d.type;
+                })
+                .attr("fill", "black")
+                .style("font-size", 12)
+                .attr("x", 25)
+                .attr("y", 15);
     }
 
     function meanValState(filterData)
@@ -142,10 +220,10 @@ function pieChart(filteredArray)
         hs_degree_female_mean /= filterData.length;
 
         return [
-            {State: filterData[0].state, type: "hs_degree_male_mean", count: hs_degree_male_mean},
-            {State: filterData[0].state, type: "no_hs_degree_male_mean", count: (1-hs_degree_male_mean)},
-            {State: filterData[0].state, type: "hs_degree_female_mean", count: hs_degree_female_mean},
-            {State: filterData[0].state, type: "no_hs_degree_female_mean", count: (1-hs_degree_female_mean)},
+            {State: filterData[0].state, type: "Males with High School degree", count: hs_degree_male_mean},
+            {State: filterData[0].state, type: "Males without High School degree", count: (1-hs_degree_male_mean)},
+            {State: filterData[0].state, type: "Females with High School degree", count: hs_degree_female_mean},
+            {State: filterData[0].state, type: "Females without High School degree", count: (1-hs_degree_female_mean)},
         ];
     }
 }
