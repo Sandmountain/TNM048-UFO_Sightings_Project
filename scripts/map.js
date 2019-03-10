@@ -97,7 +97,7 @@ function map(data){
         
         // Create element for legend
         var legendText = svg.append("g")
-            .attr("transform", "translate(200,40)");
+            .attr("transform", "translate(60,40)");
         
         // Legend color scale
         legendText.selectAll("rect")
@@ -193,7 +193,8 @@ function map(data){
                     return scaleQuantColor(totalPopulation);
                 })
                 .on("mouseover", function(d){
-                    $("." + d[0].UID).css({"stroke": "yellow", "stroke-width": "1px" });    
+                    $("." + d[0].UID).css({"stroke": "yellow", "stroke-width": "1px" });   
+                    mapInfo(d);   
                 })
                 .on("mouseout", function(d){
                         $("." + d[0].UID).css({"stroke": "yellow", "stroke-width": "0px" });    
@@ -341,7 +342,7 @@ function map(data){
             //Set Div infromation             
             $( "#PaneHolder" ).show( "drop", { direction: "right" }, "fast" );
             $( "#scatterPlot" ).show( "drop", { direction: "down" }, "fast" );
-           
+            $(".TextTitle").html("Information about " + clickedState);
             $(".TextInfromation").html(
                 "In this state there are <b>" + MeanStateValues(filteredArray, "pop") + "</b> inhabitants on record. Out of those people, <b>" + MeanStateValues(filteredArray, "debt") + "</b> are in some sort of dept. The avarage house rent for a familiy in this area is <b>$" + MeanStateValues(filteredArray, "rent_mean",true) + "</b> and average yearly income is <b>$" + MeanStateValues(filteredArray, "hi_mean") + "</b>.There are <b>" + MeanStateValues(filteredArray, "male_pop") + "</b> men and <b>" + MeanStateValues(filteredArray, "female_pop") +"</b> women who lives here. <br></br> Out of the inhabitants, <b>" + MeanStateValues(filteredArray, "rent_gt_50") + "</b> are considered being underclass, and <b>" +  MeanStateValues(filteredArray,"hs_degree") + "</b> have a HS degree or higher."
             );
@@ -369,10 +370,6 @@ function map(data){
                     
                     }
             });
-        }
-
-        function hoverRing(d){
-            console.log(d);
         }
         function hoverState(d)
         {
@@ -536,6 +533,28 @@ function MeanStateData(data, input, isFiltered)
         return state_mean;
 }
 
+function mapInfo(data)
+{
+    $("#infoPanel").html("Circle Info")
+    var scatterInfo = d3.select("#scatterInfo")
+
+    scatterInfo
+        .select("#hi_mean_info")
+        .html("Yearly income: $<b>" + Math.round(data[0].hi_mean)+"</b>");
+    scatterInfo
+        .select("#pop_info")
+        .html("Population: <b>" + data[0].pop+"</b> people");
+    scatterInfo
+        .select("#mortgage_info")
+        .html("Average HS degree: <b>" + Math.round(data[0].hs_degree)*100+ "</b>%") ;
+    scatterInfo
+        .select("#city_info")
+        .html("City: <b>" + data[0].city+"</b>");
+    scatterInfo
+        .select("#place_info")
+        .html("Area: <b>" + data[0].place+"</b>");
+    
+}
 
 
 
