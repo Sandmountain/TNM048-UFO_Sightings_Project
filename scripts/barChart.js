@@ -76,7 +76,7 @@ function barChart(filteredData,state_hi_mean_data)
                 .style("fill", function(d,i){
                     if(d.state == filteredData[0].state)
                     {
-                        return "yellow";
+                        return "#f0c862";
                     }
                     else
                         return "steelblue";            
@@ -90,7 +90,7 @@ function barChart(filteredData,state_hi_mean_data)
                     var current_pos = d3.mouse(this);
                     
                     d3.select(this)
-                        .style("fill", "green");
+                        .style("fill", "#12b259");
 
                         var tooltipDiv = document.getElementById('tooltip-group');
                         var tooltipState = document.getElementById("state-tooltip");
@@ -107,7 +107,7 @@ function barChart(filteredData,state_hi_mean_data)
                         .style("fill", function(d,i){
                             if(d.state == filteredData[0].state)
                             {
-                                return "yellow";
+                                return "#f0c862";
                             }
                             else
                                 return "steelblue";            
@@ -136,7 +136,7 @@ function barChart(filteredData,state_hi_mean_data)
             .style("fill", function(d,i){
                 if(d.state == filteredData[0].state)
                 {
-                    return "yellow";
+                    return "#f0c862";
                 }
                 else
                     return "steelblue";            
@@ -150,7 +150,7 @@ function barChart(filteredData,state_hi_mean_data)
                     var current_pos = d3.mouse(this);
                     
                     d3.select(this)
-                        .style("fill", "green");
+                        .style("fill", "#12b259");
 
                         var tooltipDiv = document.getElementById('tooltip-group');
                         var tooltipState = document.getElementById("state-tooltip");
@@ -167,7 +167,7 @@ function barChart(filteredData,state_hi_mean_data)
                         .style("fill", function(d,i){
                             if(d.state == filteredData[0].state)
                             {
-                                return "yellow";
+                                return "#f0c862";
                             }
                             else
                                 return "steelblue";            

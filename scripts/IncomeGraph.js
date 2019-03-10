@@ -29,15 +29,12 @@ function IncomeGraph(filteredArray){
     yAxisScatterPlot = d3.axisLeft(yScaleScatterPlot);
 
      //TODO: räkna ut antalet
-    var clusters = dbScan(xInput,yInput, 4000, 20, filteredArray);
+    var clusters = dbScan(xInput,yInput, 1000, 10, filteredArray);
 
     console.log("Cluster lengh: "+ clusters.length);
     console.log(clusters);
-    var clusterColor = d3.scaleQuantile()
-        .range(d3.schemeBlues[4])
-        .domain([0, 4]);
-            
-     
+
+    var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
     if(firstCheckScatterPlot == 0)
     {
@@ -123,29 +120,13 @@ function IncomeGraph(filteredArray){
                 {
                     if (clusters[index].parts.includes(i)) 
                     {
-                        /*if (index == 0) 
-                        {
-                            return "#ff0000";
-                        }
-                        else if(index == 1)
-                        {
-                            return "#00ff00";
-                        }
-                        else if(index == 2)
-                        {
-                            return "#0000ff";
-                        }
-                        else if(index == 3)
-                        {
-                            return "#aaa";
-                        }*/
-                        return clusterColor(index);
+                        return colorScale(index);
                     }
                 }
                 return "#000000";
             })
             .on("mouseover", function(d){
-                   $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });
+                   $("." + d.UID).css({"stroke": "red", "stroke-width": "4px" });
                    scatterInfo(d);    
                    $( "#scatterInfo" ).show(); 
                 })
@@ -206,34 +187,18 @@ function IncomeGraph(filteredArray){
             {
                     if (clusters[index].parts.includes(i)) 
                     {
-                        /*if (index == 0) 
-                        {
-                            return "#ff0000";
-                        }
-                        else if(index == 1)
-                        {
-                            return "#00ff00";
-                        }
-                        else if(index == 2)
-                        {
-                            return "#0000ff";
-                        }
-                        else if(index == 3)
-                        {
-                            return "#aaa";
-                        }*/
-                        return clusterColor(index);
+                        return colorScale(index);
                     }
                 
             }
             return "#000000";
         })
         .on("mouseover", function(d){
-            $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });
+            $("." + d.UID).css({"stroke": "red", "stroke-width": "4px" });
             scatterInfo(d);    
             })
         .on("mouseout", function(d){
-            $("." + d.UID).css({"stroke": "yellow", "stroke-width": "0px"  });    
+            $("." + d.UID).css({"stroke": "red", "stroke-width": "0px"  });    
         });
     }
 }
