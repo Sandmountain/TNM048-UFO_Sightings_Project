@@ -193,11 +193,11 @@ function map(data){
                     return scaleQuantColor(totalPopulation);
                 })
                 .on("mouseover", function(d){
-                    $("." + d[0].UID).css({"stroke": "yellow", "stroke-width": "1px" });   
+                    $("." + d[0].UID).css({"stroke": "red", "stroke-width": "4px" });   
                     mapInfo(d);   
                 })
                 .on("mouseout", function(d){
-                        $("." + d[0].UID).css({"stroke": "yellow", "stroke-width": "0px" });    
+                        $("." + d[0].UID).css({"stroke": "red", "stroke-width": "0px" });    
                 });
             
            /*

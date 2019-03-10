@@ -29,7 +29,7 @@ function IncomeGraph(filteredArray){
     yAxisScatterPlot = d3.axisLeft(yScaleScatterPlot);
 
      //TODO: räkna ut antalet
-    var clusters = dbScan(xInput,yInput, 4000, 20, filteredArray);
+    var clusters = dbScan(xInput,yInput, 1000, 10, filteredArray);
 
     console.log("Cluster lengh: "+ clusters.length);
     console.log(clusters);
