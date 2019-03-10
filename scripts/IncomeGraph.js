@@ -86,12 +86,17 @@ function IncomeGraph(filteredArray){
             .domain([20000, 50000, 100000, 150000])
             .range([2, 3, 4, 5]);
         
+<<<<<<< HEAD
         var dots = scatterPlot.append("g");
+=======
+        var dots = scatterPlot.append("g")
+>>>>>>> refs/remotes/origin/master
 
         dotContext = dots.selectAll("dot")
             .data(filteredArray)
             .enter().append("circle")
-            .attr("class", "dotContext")
+            .attr("class", function(d){return d.UID})
+            .attr("id", "dotContext")
             .attr("cx", function(d,i) 
             {
                 if (isNaN(xScaleScatterPlot(d[xInput]))) 
@@ -146,24 +151,11 @@ function IncomeGraph(filteredArray){
                 }
                 return "#000000";
             })
-            .on("mouseover", function(d)
-            {
-                scatterInfo(d);    
-                
-                d3.select(this)
-                    .attr("r", function(d)
-                    {
-                        console.log("hej");
-                        return 15;
-                    });
-            })
-            .on("mouseout", function(d)
-            {
-                d3.select(this)
-                    .attr("r", function(d)
-                    {
-                        return scaleQuantRad(d[xInput]);
-                    });
+            .on("mouseover", function(d){
+                   $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });    
+                })
+            .on("mouseout", function(d){
+                    $("." + d.UID).css({"stroke": "yellow", "stroke-width": "0px" });    
             });
 
     firstCheckScatterPlot = 1;
@@ -173,7 +165,8 @@ function IncomeGraph(filteredArray){
     }
     
     function updateData(filteredArray){
-        d3.selectAll(".dotContext").remove();
+        d3.selectAll("#dotContext").remove();
+        d3.selectAll()
         var scaleQuantRad = d3.scaleQuantile()
         .domain([20000, 50000, 100000, 150000])
         .range([2, 3, 4, 5]);
@@ -184,7 +177,8 @@ function IncomeGraph(filteredArray){
     dotContext = dots.selectAll("dot")
         .data(filteredArray)
         .enter().append("circle")
-        .attr("class", "dotContext")
+        .attr("class", function(d){return d.UID})
+        .attr("id", "dotContext")
         .attr("cx", function(d,i) 
         {
             if (isNaN(xScaleScatterPlot(d[xInput]))) 
@@ -214,7 +208,7 @@ function IncomeGraph(filteredArray){
         .attr("fill", function(d,i)
         {
             for (let index = 0; index < clusters.length; index++) 
-                {
+            {
                     if (clusters[index].parts.includes(i)) 
                     {
                         /*if (index == 0) 
@@ -235,27 +229,15 @@ function IncomeGraph(filteredArray){
                         }*/
                         return clusterColor(index);
                     }
-                }
-                return "#000000";
+                
+            }
+            return "#000000";
         })
-        .on("mouseover", function(d)
-        {
-            scatterInfo(d);    
-            
-            d3.select(this)
-                .attr("r", function(d)
-                {
-                    console.log("hej");
-                    return 15;
-                });
-        })
-        .on("mouseout", function(d)
-        {
-            d3.select(this)
-                .attr("r", function(d)
-                {
-                    return scaleQuantRad(d[xInput]);
-                });
+        .on("mouseover", function(d){
+            $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });    
+            })
+        .on("mouseout", function(d){
+            $("." + d.UID).css({"stroke": "yellow", "stroke-width": "0px"  });    
         });
     }
 }
