@@ -47,11 +47,12 @@ function IncomeGraph(filteredArray){
             .attr('class', "axis-label")
             .attr("transform", "rotate(-90)")
             .attr("y", 0)
-            .attr('x', -120)
+            .attr('x', -50)
             .attr('text-anchor', "end")
             .attr('dy', ".75em")
             .style("font-size", "20px")
-            .text(yInput);
+            .style("font-weight", "bold")
+            .text("High School Degree: ");
 
         svg.append("text")
             .attr('class', "axis-label")
@@ -61,7 +62,8 @@ function IncomeGraph(filteredArray){
             .attr('text-anchor', "middle")
             .attr('dy', ".75em")
             .style("font-size", "20px")
-            .text(xInput);
+            .style("font-weight", "bold")
+            .text("Household mean income($): ");
         
         scatterPlot = svg.append("g")
             .attr("class", "scatterPlot")

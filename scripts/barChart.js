@@ -39,17 +39,19 @@ function barChart(filteredData,state_hi_mean_data)
             .attr('text-anchor', "end")
             .attr('dy', ".75em")
             .style("font-size", "14px")
-            .text("Yearly income($)");
+            .style("font-weight", "bold")
+            .text("Yearly income($): ");
         
         svg.append("text")
             .attr('class', "axis-label")
             //.attr("transform", "rotate(-90)")
             .attr("y", 160)
-            .attr("x", 320)
+            .attr("x", 95)
             .attr('text-anchor', "end")
             .attr('dy', ".75em")
             .style("font-size", "14px")
-            .text("State");
+            .style("font-weight", "bold")
+            .text("State: ");
 
         g = svg.append("g")
             .attr("transform", "translate("+ margin.left + "," + margin.top + ")")
