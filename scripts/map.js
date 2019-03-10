@@ -277,28 +277,6 @@ function map(data){
                 .attr("d", path);
         }
 
-<<<<<<< HEAD
-            /*    
-            g.append("g")
-                .selectAll("circle")
-                .data(citiesData)
-                .enter().append("circle")
-                .attr("id","largeCity")
-                .attr("cx", function (d) { 
-                    if(projection([d.long,d.lat])) {
-                        return projection([d.long,d.lat])[0];
-                    }
-                    else
-                        return;
-                })
-                .attr("cy", function (d) {  
-                    if(projection([d.long,d.lat]))
-                        return projection([d.long,d.lat])[1]; 
-                    else
-                        return;
-                    })
-                .attr("r", "2px")
-=======
         //Handle the zoom menu
         $( "#ZoomOut" ).click(function() {
            reset();
@@ -306,15 +284,8 @@ function map(data){
         $( "#ZoomIn" ).click(function() {
             var state = topoJsonData.features.filter(function(d) { return d.id === 20; })[0]
             var thisPath = d3.select("path#Kansas").node();
->>>>>>> refs/remotes/origin/master
-            
             var filteredArray = data.filter( data => data.stateID === state.id).map( obj => obj );
 
-<<<<<<< HEAD
-        
-
-        function clickedState(d) {
-=======
             updateGraphs(filteredArray);
             updateHTML(filteredArray, state.id);               
             transitionFunction(state,thisPath);
@@ -322,11 +293,11 @@ function map(data){
 
         
         function clickedState(d) {    
->>>>>>> refs/remotes/origin/master
             if (d3.select('.background').node() === this) return reset();
             if (active.node() === this) return reset();
             var filteredArray = data.filter( data => data.stateID === d.id).map( obj => obj );
-
+            console.log(d);
+            console.log(this);
             updateGraphs(filteredArray);
             updateHTML(filteredArray, d.id);
             transitionFunction(d,this);   
@@ -432,10 +403,6 @@ function map(data){
         }
 }
 
-<<<<<<< HEAD
-function MeanStateData(data, input)
-{
-=======
 function MeanStateValues(filteredData, input)
 {
     var amount = 0;
@@ -474,7 +441,6 @@ function MeanStateValues(filteredData, input)
 function MeanStateData(data, input, isFiltered)
 {
         
->>>>>>> refs/remotes/origin/master
         var state = [
             {name:"Iowa", id: 0},
             {name: "Delaware",id: 1},

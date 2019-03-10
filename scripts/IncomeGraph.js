@@ -86,11 +86,7 @@ function IncomeGraph(filteredArray){
             .domain([20000, 50000, 100000, 150000])
             .range([2, 3, 4, 5]);
         
-<<<<<<< HEAD
         var dots = scatterPlot.append("g");
-=======
-        var dots = scatterPlot.append("g")
->>>>>>> refs/remotes/origin/master
 
         dotContext = dots.selectAll("dot")
             .data(filteredArray)
@@ -152,7 +148,8 @@ function IncomeGraph(filteredArray){
                 return "#000000";
             })
             .on("mouseover", function(d){
-                   $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });    
+                   $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });
+                   scatterInfo(d);    
                 })
             .on("mouseout", function(d){
                     $("." + d.UID).css({"stroke": "yellow", "stroke-width": "0px" });    
@@ -234,7 +231,8 @@ function IncomeGraph(filteredArray){
             return "#000000";
         })
         .on("mouseover", function(d){
-            $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });    
+            $("." + d.UID).css({"stroke": "yellow", "stroke-width": "2px" });
+            scatterInfo(d);    
             })
         .on("mouseout", function(d){
             $("." + d.UID).css({"stroke": "yellow", "stroke-width": "0px"  });    

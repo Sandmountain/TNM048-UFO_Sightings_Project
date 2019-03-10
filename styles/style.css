@@ -41,11 +41,7 @@ html, body {
 }
 
 #scatterPlot{
-<<<<<<< HEAD
-  margin-top: 400px;
-=======
   margin-top: 102px;
->>>>>>> refs/remotes/origin/master
   width: 70%;
   height: 400px;
   background:#aaa;
@@ -205,19 +201,6 @@ html, body {
    cursor: pointer;  
 }
 
-<<<<<<< HEAD
-#cityCircles{
-  opacity: 0;
-}
-
-.dotContext{
-  z-index: 10;
-}
-.dotContext:hover{
-  fill: darkmagenta;
-}
-=======
 #dotContext{
   cursor: pointer;
 }
->>>>>>> refs/remotes/origin/master

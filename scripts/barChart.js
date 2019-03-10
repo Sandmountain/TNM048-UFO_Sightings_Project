@@ -11,16 +11,16 @@ function barChart(filteredData,state_hi_mean_data)
     var innerWidth = width - margin.right - margin.left;
     var innerHeight = height - margin.bottom -  margin.top;
    
-    state_hi_mean_data = state_hi_mean_data.sort(function(a,b){return a.hi_mean > b.hi_mean}).reverse();
+    state_hi_mean_data2 = state_hi_mean_data.sort(function(a,b){return a.hi_mean > b.hi_mean}).reverse();
   
     if(firstCheck == 0){
         xScale = d3.scaleBand()
-            .domain(state_hi_mean_data.map(xValue))
+            .domain(state_hi_mean_data2.map(xValue))
             .range([0 , innerWidth])
             .padding(0.1);
 
         yScale = d3.scaleLinear()
-            .domain([0, d3.max(state_hi_mean_data, yValue)])
+            .domain([0, d3.max(state_hi_mean_data2, yValue)])
             .range([innerHeight, 0]);
 
         var xAxis = d3.axisBottom(xScale);
@@ -48,7 +48,7 @@ function barChart(filteredData,state_hi_mean_data)
 
         var barChart = g.append("g").attr("class", "bars")
             .selectAll("rect")
-            .data(state_hi_mean_data)
+            .data(state_hi_mean_data2)
             .enter()
             .append("rect")
             .attr("class", "bar")
@@ -109,15 +109,15 @@ function barChart(filteredData,state_hi_mean_data)
         
     else{
         
-        updateData(filteredData,state_hi_mean_data);
+        updateData(filteredData,state_hi_mean_data2);
     }
 
-    function updateData(filteredData,state_hi_mean_data){
+    function updateData(filteredData,state_hi_mean_data2){
         d3.selectAll(".bars").remove();
 
         var barChart = g.append("g").attr("class", "bars")
             .selectAll("rect")
-            .data(state_hi_mean_data)
+            .data(state_hi_mean_data2)
             .enter()
             .append("rect")
             .attr("class", "bar")
