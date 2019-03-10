@@ -3,15 +3,15 @@ var firstCheck = 0,
 
 function barChart(filteredData,state_hi_mean_data)
 {   
-    xValue = d => d.state;
+    xValue = d => d.state_ab;
     yValue = d => d.hi_mean;
-    const margin = {top: 30, right: 20, bottom: 70, left: 50};   
+    const margin = {top: 30, right: 20, bottom: 70, left: 60};   
     const width = $("#barChart").width();
     const height = $("#barChart").height();
     var innerWidth = width - margin.right - margin.left;
     var innerHeight = height - margin.bottom -  margin.top;
-   
-    state_hi_mean_data2 = state_hi_mean_data.sort(function(a,b){return a.hi_mean > b.hi_mean}).reverse();
+    
+    state_hi_mean_data2 = state_hi_mean_data.sort(function(a,b){return a.hi_mean > b.hi_mean});
   
     if(firstCheck == 0){
         xScale = d3.scaleBand()
@@ -29,6 +29,27 @@ function barChart(filteredData,state_hi_mean_data)
         svg = d3.select("#barChart").append("svg")
             .attr("width", width)
             .attr("height", height);
+
+
+        svg.append("text")
+            .attr('class', "axis-label")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0)
+            .attr('x', -30)
+            .attr('text-anchor', "end")
+            .attr('dy', ".75em")
+            .style("font-size", "14px")
+            .text("Yearly income($)");
+        
+        svg.append("text")
+            .attr('class', "axis-label")
+            //.attr("transform", "rotate(-90)")
+            .attr("y", 160)
+            .attr("x", 320)
+            .attr('text-anchor', "end")
+            .attr('dy', ".75em")
+            .style("font-size", "14px")
+            .text("State");
 
         g = svg.append("g")
             .attr("transform", "translate("+ margin.left + "," + margin.top + ")")
@@ -67,24 +88,18 @@ function barChart(filteredData,state_hi_mean_data)
                 .on("mouseover", function(d, i)
                 {
                     var current_pos = d3.mouse(this);
-                    console.log(current_pos);
+                    
                     d3.select(this)
                         .style("fill", "green");
 
                         var tooltipDiv = document.getElementById('tooltip-group');
                         var tooltipState = document.getElementById("state-tooltip");
                         var tooltipHimean = document.getElementById("hi_mean-tooltip");
-                        tooltipState.innerHTML = d.state ;
-                        tooltipHimean.innerHTML = d.hi_mean;
-                        tooltipDiv.style.top = "60px";
+                        tooltipState.innerHTML = d.state;
+                        tooltipHimean.innerHTML = "<b>" + Math.round(d.hi_mean) + "</b>";
+                        tooltipDiv.style.top = "130px";
                         tooltipDiv.style.left = current_pos[0]+'px';
                         tooltipDiv.style.display = "block";
-                        tooltipState.style.top = "60px";
-                        tooltipState.style.left = current_pos[0]+'px';
-                        tooltipState.style.display = "block";
-                        tooltipHimean.style.top = "60px";
-                        tooltipHimean.style.left = current_pos[0]+'px';
-                        tooltipHimean.style.display = "block";
                 })
                 .on("mouseout", function(d,i)
                 {
@@ -98,7 +113,6 @@ function barChart(filteredData,state_hi_mean_data)
                                 return "steelblue";            
                         });
 
-                    //d3.select(this).style("fill", "white");
                     var tooltipDiv = document.getElementById('tooltip-group');
                     tooltipDiv.style.display = "none";
                 });
@@ -136,24 +150,18 @@ function barChart(filteredData,state_hi_mean_data)
             .on("mouseover", function(d, i)
                 {
                     var current_pos = d3.mouse(this);
-                    console.log(current_pos);
+                    
                     d3.select(this)
                         .style("fill", "green");
 
                         var tooltipDiv = document.getElementById('tooltip-group');
                         var tooltipState = document.getElementById("state-tooltip");
                         var tooltipHimean = document.getElementById("hi_mean-tooltip");
-                        tooltipState.innerHTML = d.state ;
-                        tooltipHimean.innerHTML = d.hi_mean;
-                        tooltipDiv.style.top = "60px";
+                        tooltipState.innerHTML = d.state;
+                        tooltipHimean.innerHTML = "<b>" + Math.round(d.hi_mean) + "</b>";
+                        tooltipDiv.style.top = "130px";
                         tooltipDiv.style.left = current_pos[0]+'px';
                         tooltipDiv.style.display = "block";
-                        tooltipState.style.top = "60px";
-                        tooltipState.style.left = current_pos[0]+'px';
-                        tooltipState.style.display = "block";
-                        tooltipHimean.style.top = "60px";
-                        tooltipHimean.style.left = current_pos[0]+'px';
-                        tooltipHimean.style.display = "block";
                 })
                 .on("mouseout", function(d,i)
                 {
@@ -167,9 +175,11 @@ function barChart(filteredData,state_hi_mean_data)
                                 return "steelblue";            
                         });
 
-                    //d3.select(this).style("fill", "white");
+                    
+                    
                     var tooltipDiv = document.getElementById('tooltip-group');
                     tooltipDiv.style.display = "none";
+                    
                 });
     }
     

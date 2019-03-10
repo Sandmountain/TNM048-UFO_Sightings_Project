@@ -204,3 +204,14 @@ html, body {
 #dotContext{
   cursor: pointer;
 }
+
+.tooltip-barChart{
+  position:absolute;
+  z-index:1001;
+  font-size: 10px;
+  width: 100px;
+}
+
+#state-tooltip{
+  margin-top: 10px;
+}

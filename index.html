@@ -17,16 +17,14 @@
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
-
-
 <div class="Title"><h1>Real Estate visualization of United States</h1>
 </div>
 <div id="PaneHolder">
 	<p id="StateName">Texas </p><img src="" id="flag"></img>
 	<div id="barChart">
-		<div id="tooltip-group" style="display:none;position:absolute;z-index:1001;background-color:gray">
-			<div id="state-tooltip" style="display:none;position:absolute;z-index:1001;background-color:gray"></div>
-			<div id="hi_mean-tooltip" style="display:none;position:absolute;z-index:1001;background-color:gray"></div>
+		<div id="tooltip-group" class="tooltip-barChart" >
+			<div id="state-tooltip" class="tooltip-barChart"></div>
+			<div id="hi_mean-tooltip" class="tooltip-barChart"></div>
 		</div>
 	</div>
 	<!----<div id="lineChart"></div>-->
@@ -41,6 +39,7 @@
 	
 	
 	<div id="graphHolder">
+		<h6>High School Degree male/female:</h5>
 		<div id="pieChart"></div>
 	</div>
 	<div id="scatterInfo">

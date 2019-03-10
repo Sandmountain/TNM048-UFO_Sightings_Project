@@ -442,57 +442,57 @@ function MeanStateData(data, input, isFiltered)
 {
         
         var state = [
-            {name:"Iowa", id: 0},
-            {name: "Delaware",id: 1},
-            {name:"District of Columbia",id: 2},
-            {name:"Florida" ,id: 3},
-            {name:"Georgia" ,id: 4},
-            {name:"Hawaii" ,id: 5},
-            {name:"Idaho" ,id: 6},
-            {name:"Illinois" ,id: 7},
-            {name:"Indiana" ,id: 8},
-            {name:"Kansas" ,id: 9},
-            {name:"Kentucky" ,id: 10},
-            {name:"Louisiana" ,id: 11},
-            {name:"Maine" ,id: 12},
-            {name:"Maryland" ,id: 13},
-            {name:"Massachusetts" ,id: 14},
-            {name:"Michigan" ,id: 15},
-            {name:"Minnesota" ,id: 16},
-            {name:"Mississippi" ,id: 17},
-            {name:"Missouri" ,id: 18},
-            {name:"Montana" ,id: 19},
-            {name:"Nebraska" ,id: 20},
-            {name:"Nevada" ,id: 21},
-            {name:"New Hampshire" ,id: 22},
-            {name:"New Jersey" ,id: 23},
-            {name:"New Mexico" ,id: 24},
-            {name:"New York" ,id: 25},
-            {name:"North Carolina" ,id: 26},
-            {name:"North Dakota" ,id: 27},
-            {name:"Ohio" ,id: 28},
-            {name:"Oklahoma" ,id: 29},
-            {name:"Oregon" ,id: 30},
-            {name:"Pennsylvania" ,id: 31},
-            {name:"Rhode Island" ,id: 32},
-            {name:"South Carolina" ,id: 33},
-            {name:"South Dakota" ,id: 34},
-            {name:"Tennessee" ,id: 35},
-            {name:"Texas" ,id: 36},
-            {name:"Utah" ,id: 37},
-            {name:"Vermont" ,id: 38},
-            {name:"Virginia" ,id: 39},
-            {name:"Washington" ,id: 40},
-            {name:"West Virginia" ,id: 41},
-            {name:"Wisconsin" ,id: 42},
-            {name:"Wyoming" ,id: 43},
-            {name:"Alabama" ,id: 44},
-            {name:"Alaska" ,id: 45},
-            {name:"Arizona" ,id: 46},
-            {name:"Arkansas" ,id: 47},
-            {name:"California" ,id: 48},
-            {name:"Colorado" ,id: 49},
-            {name:"Connecticut" ,id: 50}
+            {name:"Iowa", nameShort: "IA" ,id: 0},
+            {name: "Delaware", nameShort: "DE", id: 1},
+            {name:"District of Columbia", nameShort: "DoC", id: 2},
+            {name:"Florida", nameShort: "FL" ,id: 3},
+            {name:"Georgia", nameShort: "GA" ,id: 4},
+            {name:"Hawaii" , nameShort: "HI" ,id: 5},
+            {name:"Idaho" , nameShort: "ID" ,id: 6},
+            {name:"Illinois" , nameShort: "IL",id: 7},
+            {name:"Indiana" , nameShort: "IN",id: 8},
+            {name:"Kansas" , nameShort: "KS",id: 9},
+            {name:"Kentucky" , nameShort: "KY",id: 10},
+            {name:"Louisiana" , nameShort: "LA",id: 11},
+            {name:"Maine" , nameShort: "ME",id: 12},
+            {name:"Maryland" , nameShort: "MD",id: 13},
+            {name:"Massachusetts" , nameShort: "MA",id: 14},
+            {name:"Michigan" , nameShort: "MI",id: 15},
+            {name:"Minnesota" , nameShort: "MN",id: 16},
+            {name:"Mississippi" , nameShort: "MS",id: 17},
+            {name:"Missouri" , nameShort: "MO",id: 18},
+            {name:"Montana" , nameShort: "MT",id: 19},
+            {name:"Nebraska" , nameShort: "NE",id: 20},
+            {name:"Nevada" , nameShort: "NV",id: 21},
+            {name:"New Hampshire" , nameShort: "NH",id: 22},
+            {name:"New Jersey" , nameShort: "NJ",id: 23},
+            {name:"New Mexico" , nameShort: "NM",id: 24},
+            {name:"New York" , nameShort: "NY",id: 25},
+            {name:"North Carolina" , nameShort: "NC",id: 26},
+            {name:"North Dakota" , nameShort: "ND",id: 27},
+            {name:"Ohio" , nameShort: "OH",id: 28},
+            {name:"Oklahoma" , nameShort: "OK",id: 29},
+            {name:"Oregon" , nameShort: "OR",id: 30},
+            {name:"Pennsylvania" , nameShort: "PA",id: 31},
+            {name:"Rhode Island" , nameShort: "RI",id: 32},
+            {name:"South Carolina" , nameShort: "SC",id: 33},
+            {name:"South Dakota" , nameShort: "SD",id: 34},
+            {name:"Tennessee" , nameShort: "TN",id: 35},
+            {name:"Texas" , nameShort: "TX",id: 36},
+            {name:"Utah" , nameShort: "UT",id: 37},
+            {name:"Vermont" , nameShort: "VT",id: 38},
+            {name:"Virginia" , nameShort: "VA",id: 39},
+            {name:"Washington" , nameShort: "WA",id: 40},
+            {name:"West Virginia" , nameShort: "WV",id: 41},
+            {name:"Wisconsin" , nameShort: "WI",id: 42},
+            {name:"Wyoming" , nameShort: "WY",id: 43},
+            {name:"Alabama" , nameShort: "AL",id: 44},
+            {name:"Alaska" , nameShort: "AK",id: 45},
+            {name:"Arizona" , nameShort: "AZ",id: 46},
+            {name:"Arkansas" , nameShort: "AR",id: 47},
+            {name:"California" , nameShort: "CA",id: 48},
+            {name:"Colorado" , nameShort: "CO",id: 49},
+            {name:"Connecticut" , nameShort: "CT",id: 50}
         ];
 
             var filterData = [];
@@ -514,7 +514,7 @@ function MeanStateData(data, input, isFiltered)
         
         for (let i = 0; i < stateCount; i++) 
         {
-            state_mean[i] = {[input]: 0, state: ""};
+            state_mean[i] = {[input]: 0, state: "", state_ab: ""};
 
             for (let j = 0; j < filterData[i].length; j++) 
             {
@@ -531,6 +531,7 @@ function MeanStateData(data, input, isFiltered)
 
             state_mean[i][input] /= filterData[i].length;
             state_mean[i].state = filterData[i][0].state;
+            state_mean[i].state_ab = filterData[i][0].state_ab;
         }
         return state_mean;
 }
