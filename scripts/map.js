@@ -4,29 +4,12 @@ function map(data){
         width = parseInt(d3.select('#usMap').style('width')), 
         width = width - margin.left - margin.right, 
         mapRatio = 0.5,
-        resetFunction, 
         height = width * mapRatio, 
         active = d3.select(null),
-        activeCounty = false,
-        latestCounty = d3.select(null),
         topoJsonData,
         dataCities = scrubData(data),
-        StateMeanValues = MeanStateData(data,"hi_mean",false),
-        ZoomMenu, testPath,
-        citiesData = (function () {
-            var json = null;
-            $.ajax({
-                'async': false,
-                'global': false,
-                dataType: "json",
-                url: "./Database/citiesUS.json",
-                mimeType: "application/json",
-                'success': function (data) {
-                    json = data;
-                }
-            });
-            return json;
-        })();
+        StateMeanValues = MeanStateData(data,"hi_mean",false);
+        
     //Scrubbing the data to save rendering time. 
     function scrubData(data){
         var scrubbed = [];
@@ -156,7 +139,7 @@ function map(data){
                     hoverCounty(d);      
                 });
             
-            //plotta punkter
+            //plotting the dots
             g.append("g")
                 .attr("id","cityCircles")
                 .selectAll("circle")
@@ -201,53 +184,7 @@ function map(data){
                 .on("mouseout", function(d){
                         $("." + d[0].UID).css({"stroke": "red", "stroke-width": "0px" });    
                 });
-            
-           /*
-           //Same Code as above, but the number of points aren't being filtered (i.e tons of small valued dots) takes very long to render
-           g.append("g")
-           .attr("id","cityCircles")
-           .selectAll("circle")
-           .data(data)
-           .enter().append("circle")
-           .attr("id","cityCircle")
-           .attr("class", function(d){return d.UID}) //.attr("id",function(d){return d.id})
-           .attr("cx", function (d) { 
-               if(projection([d.longitude,d.latitude])) {
-                   return projection([d.longitude,d.latitude])[0];
-               }
-               else
-                   return;
-           })
-           .attr("cy", function (d) {  
-               if(projection([d.longitude,d.latitude]))
-                   return projection([d.longitude,d.latitude])[1]; 
-               else
-                   return;
-               })
-           .attr("r", function(d){
-               var totalPopulation = 0;
-               for(var i=0; i < d.length; i++)
-               {
-                   totalPopulation += d[i].pop;
-               }
-               return scaleQuantRad(totalPopulation);
-           })
-           .attr("fill", function(d){
-               var totalPopulation = 0;
-               for(var i=0; i < d.length; i++)
-               {
-                   totalPopulation += d.pop;
-               }
-               return stateColors(totalPopulation);
-               })
-           .on("mouseover", function(d){
-               $("." + d.UID).css({"stroke": "red", "stroke-width": "1px" });    
-            })
-           .on("mouseout", function(d){
-                $("." + d.UID).css({"stroke": "red", "stroke-width": "0px" });    
-            });
-            */
-
+        
             //Draws the states 
             g.append("g")
                 .attr("id", "states")
@@ -259,22 +196,20 @@ function map(data){
                 .attr("id", function(d){return returnState(d.id);})
                 .attr("fill", function(d){
                     var thisState = returnState(d.id);
-                   
+
                     for(let i = 0; i < StateMeanValues.length; i++)
                     {
                         if(thisState == StateMeanValues[i].state)
                         {                       
                             return stateColors(StateMeanValues[i].hi_mean);
                         }
-                    }
-                   
+                    }                  
                 })
                 .on("click", clickedState)
                 .on("mouseover", function(d) {
                     hoverState(d);      
                 })
                 
-
             g.append("path")
                 .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
                 .attr("id", "state-borders")
@@ -355,10 +290,6 @@ function map(data){
             $("#flag").attr("src", "./Database/flags/" + clickedState.toLowerCase() + "-small.png");
         }
 
-        
-
-
-       
         function hoverCounty(d){
             //checks wether a county has been clicked or not 
             $.ajax({
@@ -402,10 +333,7 @@ function map(data){
         function returnState(id){
           var state = {"10":"Delaware","11":"District of Columbia","12":"Florida","13":"Georgia","15":"Hawaii","16":"Idaho","17":"Illinois","18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky","22":"Louisiana","23":"Maine","24":"Maryland","25":"Massachusetts","26":"Michigan","27":"Minnesota","28":"Mississippi","29":"Missouri","30":"Montana","31":"Nebraska","32":"Nevada","33":"New Hampshire","34":"New Jersey","35":"New Mexico","36":"New York","37":"North Carolina","38":"North Dakota","39":"Ohio","40":"Oklahoma","41":"Oregon","42":"Pennsylvania","44":"Rhode Island","45":"South Carolina","46":"South Dakota","47":"Tennessee","48":"Texas","49":"Utah","50":"Vermont","51":"Virginia","53":"Washington","54":"West Virginia","55":"Wisconsin","56":"Wyoming","1":"Alabama","2":"Alaska","4":"Arizona","5":"Arkansas","6":"California","8":"Colorado","9":"Connecticut"}
           return state[id];
-        }
-
-
-        
+        }        
 }
 
 //finding the mean state values for chosen inputs
