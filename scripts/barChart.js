@@ -1,3 +1,4 @@
+//Declaring these as global so they can be reused when they need to be redrawn
 var firstCheck = 0,
     g, svg,xAxis,yAxis, xScale, yScale, xValue, yValue;
 

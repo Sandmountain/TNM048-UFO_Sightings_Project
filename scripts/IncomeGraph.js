@@ -1,4 +1,4 @@
-
+//Declaring these as global so they can be reused when they need to be redrawn
 var firstCheckScatterPlot = 0,
     xAxisScatterPlot, yAxisScatterPlot, xScaleScatterPlot, yScaleScatterPlot, scatterPlot, xInput, yInput;
 
