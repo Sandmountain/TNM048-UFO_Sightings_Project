@@ -1,4 +1,4 @@
-//g, svg,xAxis,yAxis, xScale, yScale, xValue, yValue;
+
 var firstCheckScatterPlot = 0,
     xAxisScatterPlot, yAxisScatterPlot, xScaleScatterPlot, yScaleScatterPlot, scatterPlot, xInput, yInput;
 
@@ -28,7 +28,7 @@ function IncomeGraph(filteredArray){
     xAxisScatterPlot = d3.axisBottom(xScaleScatterPlot);
     yAxisScatterPlot = d3.axisLeft(yScaleScatterPlot);
 
-     //TODO: räkna ut antalet
+    //TODO: räkna ut antalet
     var clusters = dbScan(xInput,yInput, 1000, 10, filteredArray);
 
     console.log("Cluster lengh: "+ clusters.length);
@@ -56,7 +56,6 @@ function IncomeGraph(filteredArray){
 
         svg.append("text")
             .attr('class', "axis-label")
-            //.attr("transform", "rotate(-90)")
             .attr("y", 280)
             .attr("x", 666)
             .attr('text-anchor', "middle")
@@ -205,6 +204,7 @@ function IncomeGraph(filteredArray){
     }
 }
 
+//Update the tooltip if a point is hovered
 function scatterInfo(data)
 {
     $("#infoPanel").html("Point Info")

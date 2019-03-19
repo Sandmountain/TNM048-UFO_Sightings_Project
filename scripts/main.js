@@ -1,5 +1,5 @@
 var usMap,database;
-
+//Hides the divs on load
 $( "#CountyLabel" ).hide();
 $( "#scatterInfo" ).hide();
 $( "#scatterPlot" ).hide();

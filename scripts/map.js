@@ -27,7 +27,7 @@ function map(data){
             });
             return json;
         })();
-    
+    //Scrubbing the data to save rendering time. 
     function scrubData(data){
         var scrubbed = [];
         for(var i = 0; i < data.length; i++)
@@ -37,7 +37,7 @@ function map(data){
                 scrubbed[scrubbed.length-1].push(data[i]);
             }
             else if(scrubbed[scrubbed.length-1][0].city != data[i].city){
-                if(data[i].pop > 4000)
+                if(data[i].pop > 4500)
                     scrubbed.push([]);
                     scrubbed[scrubbed.length-1].push(data[i]);
             }
@@ -48,7 +48,7 @@ function map(data){
         }
         return scrubbed;
     };
-
+        //Choosing the domains for coloring and sizing
         var scaleQuantColor = d3.scaleQuantile()
                 .domain([0, 12000, 20000, 50000, 100000, 400000, 800000])
                 .range(d3.schemeBlues[8]);
@@ -73,10 +73,12 @@ function map(data){
             .attr('height', height + margin.top + margin.bottom)
             .attr('width', width + margin.left + margin.right)
             .on('click', clickedState);
-
+        
+        //loading the map
         Promise.resolve(d3.json('./Database/us-counties.topojson'))
             .then(ready);
-
+        
+        //Using the albers projection for the dots
         var projection = d3.geoAlbersUsa()
             .translate([width /2 , height / 2])
             .scale(width);
@@ -94,11 +96,11 @@ function map(data){
             .domain(d3.range(1, 8))
             .range(d3.schemeBlues[8]);
         
-        // Create element for legend
+        //Create element for legend
         var legendText = svg.append("g")
             .attr("transform", "translate(60,40)");
         
-        // Legend color scale
+        //Legend color scale
         legendText.selectAll("rect")
           .data(color.range().map(function(d) {
               d = color.invertExtent(d);
@@ -139,7 +141,7 @@ function map(data){
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
 
-            
+        //Called when the data for the map has been loaded    
         function ready(us) {
             topoJsonData = topojson.feature(us, us.objects.states);
 
@@ -161,7 +163,7 @@ function map(data){
                 .data(dataCities)
                 .enter().append("circle")
                 .attr("id","cityCircle")
-                .attr("class", function(d){return d[0].UID}) //.attr("id",function(d){return d.id})
+                .attr("class", function(d){return d[0].UID})
                 .attr("cx", function (d) { 
                     if(projection([d[0].longitude,d[0].latitude])) {
                         return projection([d[0].longitude,d[0].latitude])[0];
@@ -246,6 +248,7 @@ function map(data){
             });
             */
 
+            //Draws the states 
             g.append("g")
                 .attr("id", "states")
                 .selectAll("path")
@@ -282,6 +285,7 @@ function map(data){
         $( "#ZoomOut" ).click(function() {
            reset();
         });
+        //Zooms in on a hardcoded state if the + button in spressed
         $( "#ZoomIn" ).click(function() {
             var state = topoJsonData.features.filter(function(d) { return d.id === 20; })[0]
             var thisPath = d3.select("path#Kansas").node();
@@ -370,6 +374,7 @@ function map(data){
                     }
             });
         }
+        //Update the state div
         function hoverState(d)
         {
             $( "#CountyLabel" ).html("<p class='stateText'>" + returnState(d.id)+ "</p>").show();
@@ -393,7 +398,7 @@ function map(data){
             $("#cityCircles").fadeTo( "fast" , 0);
             $( "#scatterInfo" ).hide( "drop", { direction: "left" }, "fast" )
         }
-
+        //Fuunction that returns the state's name from an id
         function returnState(id){
           var state = {"10":"Delaware","11":"District of Columbia","12":"Florida","13":"Georgia","15":"Hawaii","16":"Idaho","17":"Illinois","18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky","22":"Louisiana","23":"Maine","24":"Maryland","25":"Massachusetts","26":"Michigan","27":"Minnesota","28":"Mississippi","29":"Missouri","30":"Montana","31":"Nebraska","32":"Nevada","33":"New Hampshire","34":"New Jersey","35":"New Mexico","36":"New York","37":"North Carolina","38":"North Dakota","39":"Ohio","40":"Oklahoma","41":"Oregon","42":"Pennsylvania","44":"Rhode Island","45":"South Carolina","46":"South Dakota","47":"Tennessee","48":"Texas","49":"Utah","50":"Vermont","51":"Virginia","53":"Washington","54":"West Virginia","55":"Wisconsin","56":"Wyoming","1":"Alabama","2":"Alaska","4":"Arizona","5":"Arkansas","6":"California","8":"Colorado","9":"Connecticut"}
           return state[id];
@@ -403,6 +408,7 @@ function map(data){
         
 }
 
+//finding the mean state values for chosen inputs
 function MeanStateValues(filteredData, input)
 {
     var amount = 0;
@@ -440,7 +446,7 @@ function MeanStateValues(filteredData, input)
 
 function MeanStateData(data, input, isFiltered)
 {
-        
+        //Varible for holding the name, id and shortName
         var state = [
             {name:"Iowa", nameShort: "IA" ,id: 0},
             {name: "Delaware", nameShort: "DE", id: 1},
@@ -497,18 +503,14 @@ function MeanStateData(data, input, isFiltered)
 
             var filterData = [];
             for (let i = 0; i < state.length; i++) 
-            {
-                    
+            {                  
                 var filterDataItem = data.filter(function(d)
                 {
-                    return d.state === state[i].name;
-                    
+                    return d.state === state[i].name;               
                 });   
-                filterData[i] = filterDataItem;
-                
+                filterData[i] = filterDataItem;              
             }
-        
-
+    
         var stateCount = filterData.length;
         var state_mean = [];
         
@@ -524,11 +526,9 @@ function MeanStateData(data, input, isFiltered)
                 }
                 else
                 {
-                    state_mean[i][input] += filterData[i][j][input];
-                    
+                    state_mean[i][input] += filterData[i][j][input];    
                 }
             }
-
             state_mean[i][input] /= filterData[i].length;
             state_mean[i].state = filterData[i][0].state;
             state_mean[i].state_ab = filterData[i][0].state_ab;
@@ -536,6 +536,7 @@ function MeanStateData(data, input, isFiltered)
         return state_mean;
 }
 
+//Updates the tooltip
 function mapInfo(data)
 {
     $("#infoPanel").html("Circle Info")
