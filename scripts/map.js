@@ -37,11 +37,7 @@ function map(data){
                 scrubbed[scrubbed.length-1].push(data[i]);
             }
             else if(scrubbed[scrubbed.length-1][0].city != data[i].city){
-<<<<<<< HEAD
-                if(data[i].pop > 6000)
-=======
                 if(data[i].pop > 4500)
->>>>>>> 0a8be2a206139aafdb88ed3566577ffa8764f381
                     scrubbed.push([]);
                     scrubbed[scrubbed.length-1].push(data[i]);
             }
@@ -100,11 +96,11 @@ function map(data){
             .domain(d3.range(1, 8))
             .range(d3.schemeBlues[8]);
         
-        //Create element for legend
+        // Create element for legend
         var legendText = svg.append("g")
             .attr("transform", "translate(60,40)");
         
-        //Legend color scale
+        // Legend color scale
         legendText.selectAll("rect")
           .data(color.range().map(function(d) {
               d = color.invertExtent(d);
@@ -167,7 +163,7 @@ function map(data){
                 .data(dataCities)
                 .enter().append("circle")
                 .attr("id","cityCircle")
-                .attr("class", function(d){return d[0].UID})
+                .attr("class", function(d){return d[0].UID}) //.attr("id",function(d){return d.id})
                 .attr("cx", function (d) { 
                     if(projection([d[0].longitude,d[0].latitude])) {
                         return projection([d[0].longitude,d[0].latitude])[0];
