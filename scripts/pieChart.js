@@ -1,3 +1,4 @@
+//Declaring these as global so they can be reused when they need to be redrawn
 var firstCheckPie = 0,
     pieChartGroup, ledgends;
 

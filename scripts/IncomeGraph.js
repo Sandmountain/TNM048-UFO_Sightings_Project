@@ -31,12 +31,10 @@ function IncomeGraph(filteredArray) {
     //TODO: räkna ut antalet
     var clusters = dbScan(xInput, yInput, 1000, 10, filteredArray);
 
-    console.log("Cluster lengh: " + clusters.length);
-    console.log(clusters);
-
     var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
     if (firstCheckScatterPlot == 0) {
+        
         var svg = d3.select("#scatterPlot").append("svg")
             .attr("id", "scatterPlotGraph")
             .attr("width", svgWidth)
