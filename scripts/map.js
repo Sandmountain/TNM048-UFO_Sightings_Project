@@ -37,7 +37,7 @@ function map(data){
                 scrubbed[scrubbed.length-1].push(data[i]);
             }
             else if(scrubbed[scrubbed.length-1][0].city != data[i].city){
-                if(data[i].pop > 4000)
+                if(data[i].pop > 6000)
                     scrubbed.push([]);
                     scrubbed[scrubbed.length-1].push(data[i]);
             }
@@ -549,7 +549,7 @@ function mapInfo(data)
         .html("Population: <b>" + data[0].pop+"</b> people");
     scatterInfo
         .select("#mortgage_info")
-        .html("Average HS degree: <b>" + Math.round(data[0].hs_degree)*100+ "</b>%") ;
+        .html("Average HS degree: <b>" + Math.round(data[0].hs_degree*100) + "</b>%") ;
     scatterInfo
         .select("#city_info")
         .html("City: <b>" + data[0].city+"</b>");

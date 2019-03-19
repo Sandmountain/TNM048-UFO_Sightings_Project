@@ -197,7 +197,8 @@ function IncomeGraph(filteredArray){
         })
         .on("mouseover", function(d){
             $("." + d.UID).css({"stroke": "red", "stroke-width": "4px" });
-            scatterInfo(d);    
+            scatterInfo(d);  
+            $( "#scatterInfo" ).show();  
             })
         .on("mouseout", function(d){
             $("." + d.UID).css({"stroke": "red", "stroke-width": "0px"  });    
@@ -218,7 +219,7 @@ function scatterInfo(data)
         .html("Population: <b>" + data.pop+"</b> people");
     scatterInfo
         .select("#mortgage_info")
-        .html("Average HS degree: <b>" + Math.round(data[yInput]*100)+ "</b>%") ;
+        .html("Average HS degree: <b>" + Math.round(data[yInput]*100) + "</b>%") ;
     scatterInfo
         .select("#city_info")
         .html("City: <b>" + data.city + "</b>");
