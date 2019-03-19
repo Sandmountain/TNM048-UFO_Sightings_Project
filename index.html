@@ -9,11 +9,9 @@
 
 <body>
 
- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
- <script type="text/javascript" src="http://d3js.org/topojson.v3.min.js"></script>
- <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/topojson.v3.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<!--<script src="https://d3js.org/d3-queue.v3.min.js"></script>-->
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
@@ -27,7 +25,6 @@
 			<div id="hi_mean-tooltip" class="tooltip-barChart"></div>
 		</div>
 	</div>
-	<!----<div id="lineChart"></div>-->
 	<p class="TextTitle">Information about state:</p>
 	<p class="TextInfromation">
 	In this city there are (data.population) inhabitants. Out of those inhabitants, (data.unemployed) are unemployed. 
@@ -36,23 +33,19 @@
 		<br></br>
 	Out of the (data.population) inhabitants, (data.rent_gt_50) persons are considered really poor, and (data.rent_gt_10) are considred rich.
 	</p>
-	
-	
 	<div id="graphHolder">
 		<h6>High School Degree male/female:</h5>
 		<div id="pieChart"></div>
 	</div>
-	
 </div>
 
-</div>
 
 <div id="ZoomMenu">
 	<div id="ZoomIn">+</div>
 	<div id="HorizontalLine"></div>
-	<div id="ZoomOut">-</div>
-	
+	<div id="ZoomOut">-</div>	
 </div>
+
 <div id="CountyLabel"></div>
 
 <div id="scatterInfo">
@@ -71,7 +64,7 @@
 
 </body>
 
-<!--Our scripts -->
+<!--custom scripts -->
 <script src="scripts/DbScan.js"></script>
 <script src="scripts/main.js"></script>
 <script src="scripts/map.js"></script>
