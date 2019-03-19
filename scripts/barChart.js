@@ -1,22 +1,24 @@
+//Declaring these as global so they can be reused when they need to be redrawn
 var firstCheck = 0,
-    g, svg,xAxis,yAxis, xScale, yScale, xValue, yValue;
+    g, svg, xAxis, yAxis, xScale, yScale, xValue, yValue;
 
-function barChart(filteredData,state_hi_mean_data)
-{   
+function barChart(filteredData, state_hi_mean_data) {
     xValue = d => d.state_ab;
     yValue = d => d.hi_mean;
-    const margin = {top: 30, right: 20, bottom: 70, left: 60};   
+    const margin = { top: 30, right: 20, bottom: 70, left: 60 };
     const width = $("#barChart").width();
     const height = $("#barChart").height();
     var innerWidth = width - margin.right - margin.left;
-    var innerHeight = height - margin.bottom -  margin.top;
-    
-    state_hi_mean_data2 = state_hi_mean_data.sort(function(a,b){return (a.hi_mean)>( b.hi_mean)}).reverse();
-  
-    if(firstCheck == 0){
+    var innerHeight = height - margin.bottom - margin.top;
+
+    //sorting the state date to be in decending order
+    state_hi_mean_data2 = state_hi_mean_data.sort(function (a, b) { return (a.hi_mean) > (b.hi_mean) }).reverse();
+
+    //Run first time when a state is loaded
+    if (firstCheck == 0) {
         xScale = d3.scaleBand()
             .domain(state_hi_mean_data2.map(xValue))
-            .range([0 , innerWidth])
+            .range([0, innerWidth])
             .padding(0.1);
 
         yScale = d3.scaleLinear()
@@ -41,7 +43,7 @@ function barChart(filteredData,state_hi_mean_data)
             .style("font-size", "14px")
             .style("font-weight", "bold")
             .text("Yearly income($): ");
-        
+
         svg.append("text")
             .attr('class', "axis-label")
             .attr("y", 160)
@@ -53,7 +55,7 @@ function barChart(filteredData,state_hi_mean_data)
             .text("State: ");
 
         g = svg.append("g")
-            .attr("transform", "translate("+ margin.left + "," + margin.top + ")")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .attr("class", "barChart");
 
         g.append("g")
@@ -61,7 +63,7 @@ function barChart(filteredData,state_hi_mean_data)
 
         g.append("g")
             .call(xAxis)
-            .attr("transform", "translate("+ 0 + "," + innerHeight + ")")
+            .attr("transform", "translate(" + 0 + "," + innerHeight + ")")
             .selectAll("text")
             .attr("text-anchor", "end")
             .attr("dx", "-.8em")
@@ -74,58 +76,55 @@ function barChart(filteredData,state_hi_mean_data)
             .enter()
             .append("rect")
             .attr("class", "bar")
-                .style("fill", function(d,i){
-                    if(d.state == filteredData[0].state)
-                    {
-                        return "#f0c862";
-                    }
-                    else
-                        return "steelblue";            
-                })
-                .attr("y", d => yScale(yValue(d)))
-                .attr("x", d => xScale(xValue(d)))
-                .attr("height", d => yScale(0) - yScale(yValue(d)))
-                .attr("width", xScale.bandwidth())
-                .on("mouseover", function(d, i)
-                {
-                    var current_pos = d3.mouse(this);
-                    
-                    d3.select(this)
-                        .style("fill", "#12b259");
+            .style("fill", function (d, i) {
+                if (d.state == filteredData[0].state) {
+                    return "#f0c862";
+                }
+                else
+                    return "steelblue";
+            })
+            .attr("y", d => yScale(yValue(d)))
+            .attr("x", d => xScale(xValue(d)))
+            .attr("height", d => yScale(0) - yScale(yValue(d)))
+            .attr("width", xScale.bandwidth())
+            .on("mouseover", function (d, i) {
+                var current_pos = d3.mouse(this);
 
-                        var tooltipDiv = document.getElementById('tooltip-group');
-                        var tooltipState = document.getElementById("state-tooltip");
-                        var tooltipHimean = document.getElementById("hi_mean-tooltip");
-                        tooltipState.innerHTML = d.state;
-                        tooltipHimean.innerHTML = "<b>" + Math.round(d.hi_mean) + "</b>";
-                        tooltipDiv.style.top = "130px";
-                        tooltipDiv.style.left = current_pos[0]+'px';
-                        tooltipDiv.style.display = "block";
-                })
-                .on("mouseout", function(d,i)
-                {
-                    d3.select(this)
-                        .style("fill", function(d,i){
-                            if(d.state == filteredData[0].state)
-                            {
-                                return "#f0c862";
-                            }
-                            else
-                                return "steelblue";            
-                        });
+                d3.select(this)
+                    .style("fill", "#12b259");
 
-                    var tooltipDiv = document.getElementById('tooltip-group');
-                    tooltipDiv.style.display = "none";
-                })
-            firstCheck = 1;
-        }
-        
-    else{
-        
-        updateData(filteredData,state_hi_mean_data2);
+                var tooltipDiv = document.getElementById('tooltip-group');
+                var tooltipState = document.getElementById("state-tooltip");
+                var tooltipHimean = document.getElementById("hi_mean-tooltip");
+                tooltipState.innerHTML = d.state;
+                tooltipHimean.innerHTML = "<b>" + Math.round(d.hi_mean) + "</b>";
+                tooltipDiv.style.top = "130px";
+                tooltipDiv.style.left = current_pos[0] + 'px';
+                tooltipDiv.style.display = "block";
+            })
+            .on("mouseout", function (d, i) {
+                d3.select(this)
+                    .style("fill", function (d, i) {
+                        if (d.state == filteredData[0].state) {
+                            return "#f0c862";
+                        }
+                        else
+                            return "steelblue";
+                    });
+
+                var tooltipDiv = document.getElementById('tooltip-group');
+                tooltipDiv.style.display = "none";
+            })
+        firstCheck = 1;
     }
 
-    function updateData(filteredData,state_hi_mean_data2){
+    else {
+
+        updateData(filteredData, state_hi_mean_data2);
+    }
+
+    //This function is called everytime the data needs to be redrawn
+    function updateData(filteredData, state_hi_mean_data2) {
         d3.selectAll(".bars").remove();
          //Plots the bars on the bar chart
         var barChart = g.append("g").attr("class", "bars")
@@ -134,52 +133,48 @@ function barChart(filteredData,state_hi_mean_data)
             .enter()
             .append("rect")
             .attr("class", "bar")
-            .style("fill", function(d,i){
-                if(d.state == filteredData[0].state)
-                {
+            .style("fill", function (d, i) {
+                if (d.state == filteredData[0].state) {
                     return "#f0c862";
                 }
                 else
-                    return "steelblue";            
+                    return "steelblue";
             })
             .attr("y", d => yScale(yValue(d)))
             .attr("x", d => xScale(xValue(d)))
             .attr("height", d => yScale(0) - yScale(yValue(d)))
             .attr("width", xScale.bandwidth())
-            .on("mouseover", function(d, i)
-                {
-                    var current_pos = d3.mouse(this);
-                    
-                    d3.select(this)
-                        .style("fill", "#12b259");
+            .on("mouseover", function (d, i) {
+                var current_pos = d3.mouse(this);
 
-                        var tooltipDiv = document.getElementById('tooltip-group');
-                        var tooltipState = document.getElementById("state-tooltip");
-                        var tooltipHimean = document.getElementById("hi_mean-tooltip");
-                        tooltipState.innerHTML = d.state;
-                        tooltipHimean.innerHTML = "<b>" + Math.round(d.hi_mean) + "</b>";
-                        tooltipDiv.style.top = "130px";
-                        tooltipDiv.style.left = current_pos[0]+'px';
-                        tooltipDiv.style.display = "block";
-                })
-                .on("mouseout", function(d,i)
-                {
-                    d3.select(this)
-                        .style("fill", function(d,i){
-                            if(d.state == filteredData[0].state)
-                            {
-                                return "#f0c862";
-                            }
-                            else
-                                return "steelblue";            
-                        });
+                d3.select(this)
+                    .style("fill", "#12b259");
 
-                    
-                    
-                    var tooltipDiv = document.getElementById('tooltip-group');
-                    tooltipDiv.style.display = "none";
-                    
-                });
+                var tooltipDiv = document.getElementById('tooltip-group');
+                var tooltipState = document.getElementById("state-tooltip");
+                var tooltipHimean = document.getElementById("hi_mean-tooltip");
+                tooltipState.innerHTML = d.state;
+                tooltipHimean.innerHTML = "<b>" + Math.round(d.hi_mean) + "</b>";
+                tooltipDiv.style.top = "130px";
+                tooltipDiv.style.left = current_pos[0] + 'px';
+                tooltipDiv.style.display = "block";
+            })
+            .on("mouseout", function (d, i) {
+                d3.select(this)
+                    .style("fill", function (d, i) {
+                        if (d.state == filteredData[0].state) {
+                            return "#f0c862";
+                        }
+                        else
+                            return "steelblue";
+                    });
+
+
+
+                var tooltipDiv = document.getElementById('tooltip-group');
+                tooltipDiv.style.display = "none";
+
+            });
     }
-    
+
 }

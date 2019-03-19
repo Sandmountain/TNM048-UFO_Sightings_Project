@@ -1,7 +1,6 @@
 html, body {
   height: 100%;
 }
-
 .Title{
   position: fixed;
   z-index: 10;
@@ -11,7 +10,6 @@ html, body {
   -moz-box-shadow: 0px -18px 6px 18px rgba(0,0,0,1);
   box-shadow: 0px -18px 6px 18px rgba(0,0,0,1);
 }
-
 .TextTitle{
   font-weight: bold;
   padding-top:5px;
@@ -20,7 +18,6 @@ html, body {
 .TextInfromation{
   font-size: 12px;
 }
-
 #barChart{
   width: 100%;
   height: 200px;
@@ -39,7 +36,6 @@ html, body {
   width: 100%;
   height: 120px;
 }
-
 #scatterPlot{
   margin-top: 102px;
   width: 70%;
@@ -50,17 +46,13 @@ html, body {
   padding-left: 5px;
   padding-right: 5px;
 }
-
-
 #flag{
   top: 75px;
   right: 10px;
   position: absolute;
   width:60px;
   height:40px;
-  
 }
-
 #PaneHolder{
   padding-top: 50px;
   padding-left: 10px;
@@ -71,21 +63,18 @@ html, body {
   right: 0%;
   z-index: 1;
   width:30%;
-  height:  100%;
+  height: 100%;
   -webkit-box-shadow: -2px 1px 6px -1px rgba(0,0,0,1);
   -moz-box-shadow: -2px 1px 6px -1px rgba(0,0,0,1);
   box-shadow: -2px 1px 6px -1px rgba(0,0,0,1);
-  
 }
-
-#usMap { 
+#usMap {
   padding-top: 45px;
-	height: 584px;
+  height: 584px;
   width: 70%;
-	z-index: 1;
+  z-index: 1;
   position: centre;
 }
-
 #ZoomMenu{
   cursor:pointer;
   position: fixed;
@@ -101,18 +90,14 @@ html, body {
   -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
-  
 }
-
 #HorizontalLine{
   height: 1px;
   background: rgba(0, 0, 0, 0.068);
   width: 30px;
 }
 #ZoomIn{
-
   padding-bottom: 2px;
-
 }
 #ZoomIn:hover{
   background: rgb(204, 204, 204);
@@ -127,7 +112,6 @@ html, body {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-
 #CountyLabel{
   position: fixed;
   top: 78px;
@@ -142,85 +126,67 @@ html, body {
   -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
- }
-
-
-
-
+}
 .background {
-    fill: none;
-    pointer-events: all;
-    cursor: zoom-out;
+  fill: none;
+  pointer-events: all;
+  cursor: zoom-out;
 }
-
 #states {
-    cursor: zoom-in;
+  cursor: zoom-in;
 }
-
 #states .active {
-    display:none;
+  display:none;
 }
-
 #state-borders {
-    fill: none;
-    stroke: #fff;
-    stroke-width: 1.2px;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-    pointer-events: none;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
 }
-
 .county-boundary {
-    fill: rgb(241, 241, 241);
-    stroke: rgb(255, 255, 255);
-    stroke-width: .2px;
+  fill: rgb(241, 241, 241);
+  stroke: rgb(255, 255, 255);
+  stroke-width: .2px;
 }
-
 .state:hover{
   fill:rgb(207, 207, 207);
 }
-
 .InformationPane{
-
   position: fixed;
   height: 100%;
-
 }
-
 #StateName{
   font-size: 50px;
 }
 #CountyName{
   font-size: 70px;
 }
-
- .stateText{
+.stateText{
   font-weight: bold;
   font-size: 11px;
- }
- .countyText{
+}
+.countyText{
   font-style: italic;
   font-size: 11px;
- }
+}
 .plotPoints{
   opacity: 0.5;
 }
-
 #cityCircles{
-   cursor: pointer;  
+  cursor: pointer;
 }
-
 #dotContext{
   cursor: pointer;
 }
-
 .tooltip-barChart{
   position:absolute;
   z-index:1001;
   font-size: 10px;
   width: 100px;
 }
-
 #state-tooltip{
   margin-top: 10px;
 }
