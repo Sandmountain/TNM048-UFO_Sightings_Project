@@ -25,7 +25,7 @@ function barChart(filteredData,state_hi_mean_data)
 
         var xAxis = d3.axisBottom(xScale);
         var yAxis = d3.axisLeft(yScale);
-
+        //Creates the svg holder for the barchart
         svg = d3.select("#barChart").append("svg")
             .attr("width", width)
             .attr("height", height);
@@ -44,7 +44,6 @@ function barChart(filteredData,state_hi_mean_data)
         
         svg.append("text")
             .attr('class', "axis-label")
-            //.attr("transform", "rotate(-90)")
             .attr("y", 160)
             .attr("x", 95)
             .attr('text-anchor', "end")
@@ -68,7 +67,7 @@ function barChart(filteredData,state_hi_mean_data)
             .attr("dx", "-.8em")
             .attr("dy", "-.55em")
             .attr("transform", "rotate(-85)");
-
+        //Plots the bars on the bar chart
         var barChart = g.append("g").attr("class", "bars")
             .selectAll("rect")
             .data(state_hi_mean_data2)
@@ -128,7 +127,7 @@ function barChart(filteredData,state_hi_mean_data)
 
     function updateData(filteredData,state_hi_mean_data2){
         d3.selectAll(".bars").remove();
-
+         //Plots the bars on the bar chart
         var barChart = g.append("g").attr("class", "bars")
             .selectAll("rect")
             .data(state_hi_mean_data2)

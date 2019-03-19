@@ -60,12 +60,6 @@ function pieChart(filteredArray)
             });
             
         arc.append("text")
-            /*
-            .attr("transform", function(d)
-            {
-                return "translate(" + labelArc.centroid(d) + ")";
-            })
-            */
             .attr("x", function(d)
             {
                 return labelArc.centroid(d)[0];
@@ -74,13 +68,9 @@ function pieChart(filteredArray)
             {
                 return labelArc.centroid(d)[1];
             })
-            //.attr("dy", ".10em")
+            
             .style("font-size", 10);
-            /*
-            .text(function(d)
-            {
-                return Math.round((d.data.count * 100) * 100) / 100 + "%";
-            });*/ 
+            
 
             ledgends = svg.append("g").attr("transform", "translate(170,-15)")
 
@@ -144,7 +134,7 @@ function pieChart(filteredArray)
             .data(pie(meanHsDegree))
             .enter()
             .append("g")
-                .attr("class", "arc");
+            .attr("class", "arc");
             
         arc.append("path")
             .attr("d", path)
@@ -164,13 +154,8 @@ function pieChart(filteredArray)
             {
                 return labelArc.centroid(d)[1];
             })
-            //.attr("dy", ".10em")
             .style("font-size", 10);
-            /*
-            .text(function(d)
-            {
-                return Math.round((d.data.count * 100) * 100) / 100 + "%";
-            });*/              
+                 
             
             var legend = ledgends
                 .selectAll(".ledgends")
@@ -200,7 +185,7 @@ function pieChart(filteredArray)
                 .attr("x", 25)
                 .attr("y", 15);
     }
-
+    //Calculates the mean high school degree percentage in the selected state.
     function meanValState(filterData)
     {
         

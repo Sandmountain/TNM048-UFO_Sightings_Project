@@ -1,3 +1,4 @@
+//This DBSCAN function was written with the following github repository as reference: https://github.com/upphiminn/jDBSCAN
 function dbScan(DataOfInt1x,DataOfInt2y, eps, minPts, data)
 {
     var clusters = []; //Cluster array we will save each index belonging to a cluster at each index.
@@ -56,7 +57,7 @@ function dbScan(DataOfInt1x,DataOfInt2y, eps, minPts, data)
                 }
             }
 
-            if (status[curr_point_idx] < 1) // not assigned to a cluster but visited (= 0)
+            if (status[curr_point_idx] < 1) // not assigned to a cluster but visited which means 0
             { 
                 status[curr_point_idx] = cluster_idx;
                 clusters[cluster_idx - 1].push(curr_point_idx);

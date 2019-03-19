@@ -38,6 +38,7 @@ function IncomeGraph(filteredArray){
 
     if(firstCheckScatterPlot == 0)
     {
+        //Creates svg holder for the scatter plot.
         var svg = d3.select("#scatterPlot").append("svg")
             .attr("id", "scatterPlotGraph")
             .attr("width", svgWidth)
@@ -82,7 +83,7 @@ function IncomeGraph(filteredArray){
             .range([2, 3, 4, 5]);
         
         var dots = scatterPlot.append("g");
-
+        //This draws the dots on the graph 
         dotContext = dots.selectAll("dot")
             .data(filteredArray)
             .enter().append("circle")
