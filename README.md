@@ -1,2 +1,2 @@
-# TNM048-UFO_Sightings_Project
+# TNM048 - United States Economy Visualization
 A project in the course TNM048
